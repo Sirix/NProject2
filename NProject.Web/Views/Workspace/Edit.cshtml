@@ -1,0 +1,33 @@
+﻿@model NProject.Models.Domain.Workspace
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/Site.Layout.cshtml";
+}
+
+<h2>@Model.Name</h2>
+<script language="javascript" type="text/javascript" src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+@{Html.RenderPartial("_form", Model);}
+<br />
+<br />
+<div id="ws_del_confirm" class="modal hide fade" style="display: none; ">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Deleting "@Model.Name" workspace</h3>
+    </div>
+    <div class="modal-body">
+        <p>You are about to delete this workspace.</p>
+        <p>If you continue, this action <b>can not be undone</b>.</p>
+        <p>All projects inside this workspace will be deleted.. </p>
+    </div>
+    <div class="modal-footer">
+    @using (Html.BeginForm("Delete", "Workspace", FormMethod.Post))
+    {
+        @Html.Hidden("id", Model.Id)
+        @Html.AntiForgeryToken()
+        <input type="submit" class="btn btn-danger large" value="Yes, DELETE it" />
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+    }              
+    </div>
+</div>
+<input class="btn btn-danger large" onclick="$('#ws_del_confirm').modal('show');"  value="Delete" type="button">

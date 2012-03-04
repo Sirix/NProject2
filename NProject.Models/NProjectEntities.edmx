@@ -1,0 +1,1028 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NProject.Models.Domain.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="NProjectModelsDomainStoreContainer">
+    <EntitySet Name="Users" EntityType="NProject.Models.Domain.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Workspaces" EntityType="NProject.Models.Domain.Store.Workspaces" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Projects" EntityType="NProject.Models.Domain.Store.Projects" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Tasks" EntityType="NProject.Models.Domain.Store.Tasks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Meetings" EntityType="NProject.Models.Domain.Store.Meetings" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Invitations" EntityType="NProject.Models.Domain.Store.Invitations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TaskComments" EntityType="NProject.Models.Domain.Store.TaskComments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MeetingComments" EntityType="NProject.Models.Domain.Store.MeetingComments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TeamMates" EntityType="NProject.Models.Domain.Store.TeamMates" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MeetingParticipants" EntityType="NProject.Models.Domain.Store.MeetingParticipants" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="WorkspaceProject" Association="NProject.Models.Domain.Store.WorkspaceProject">
+      <End Role="Workspace" EntitySet="Workspaces" />
+      <End Role="Project" EntitySet="Projects" />
+    </AssociationSet>
+    <AssociationSet Name="UserWorkspace" Association="NProject.Models.Domain.Store.UserWorkspace">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Workspace" EntitySet="Workspaces" />
+    </AssociationSet>
+    <AssociationSet Name="PMProjects" Association="NProject.Models.Domain.Store.PMProjects">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Project" EntitySet="Projects" />
+    </AssociationSet>
+    <AssociationSet Name="ProjectTask" Association="NProject.Models.Domain.Store.ProjectTask">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="Task" EntitySet="Tasks" />
+    </AssociationSet>
+    <AssociationSet Name="UserTask" Association="NProject.Models.Domain.Store.UserTask">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Task" EntitySet="Tasks" />
+    </AssociationSet>
+    <AssociationSet Name="UserMeeting" Association="NProject.Models.Domain.Store.UserMeeting">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Meeting" EntitySet="Meetings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MeetingParticipants_Meeting" Association="NProject.Models.Domain.Store.FK_MeetingParticipants_Meeting">
+      <End Role="Meeting" EntitySet="Meetings" />
+      <End Role="MeetingParticipants" EntitySet="MeetingParticipants" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MeetingParticipants_User" Association="NProject.Models.Domain.Store.FK_MeetingParticipants_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="MeetingParticipants" EntitySet="MeetingParticipants" />
+    </AssociationSet>
+    <AssociationSet Name="UserInvitation" Association="NProject.Models.Domain.Store.UserInvitation">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Invitation" EntitySet="Invitations" />
+    </AssociationSet>
+    <AssociationSet Name="UserInvitation1" Association="NProject.Models.Domain.Store.UserInvitation1">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Invitation" EntitySet="Invitations" />
+    </AssociationSet>
+    <AssociationSet Name="ProjectInvitation" Association="NProject.Models.Domain.Store.ProjectInvitation">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="Invitation" EntitySet="Invitations" />
+    </AssociationSet>
+    <AssociationSet Name="UserComment" Association="NProject.Models.Domain.Store.UserComment">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Comment" EntitySet="TaskComments" />
+    </AssociationSet>
+    <AssociationSet Name="TaskTaskComment" Association="NProject.Models.Domain.Store.TaskTaskComment">
+      <End Role="Task" EntitySet="Tasks" />
+      <End Role="TaskComment" EntitySet="TaskComments" />
+    </AssociationSet>
+    <AssociationSet Name="UserMeetingComment" Association="NProject.Models.Domain.Store.UserMeetingComment">
+      <End Role="User" EntitySet="Users" />
+      <End Role="MeetingComment" EntitySet="MeetingComments" />
+    </AssociationSet>
+    <AssociationSet Name="MeetingMeetingComment" Association="NProject.Models.Domain.Store.MeetingMeetingComment">
+      <End Role="Meeting" EntitySet="Meetings" />
+      <End Role="MeetingComment" EntitySet="MeetingComments" />
+    </AssociationSet>
+    <AssociationSet Name="UserTeamMate" Association="NProject.Models.Domain.Store.UserTeamMate">
+      <End Role="User" EntitySet="Users" />
+      <End Role="TeamMate" EntitySet="TeamMates" />
+    </AssociationSet>
+    <AssociationSet Name="ProjectTeamMate" Association="NProject.Models.Domain.Store.ProjectTeamMate">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="TeamMate" EntitySet="TeamMates" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="30" />
+    <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="150" />
+    <Property Name="HoursOffsetFromUTC" Type="int" Nullable="false" DefaultValue="0" />
+    <Property Name="AccountType" Type="int" Nullable="false" />
+    <Property Name="RegistrationDate" Type="datetime" Nullable="false" />
+    <Property Name="PasswordHash" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Language" Type="nvarchar" Nullable="false" DefaultValue="en-us" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="Workspaces">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="30" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Owner_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Projects">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="EndDate" Type="datetime" Nullable="false" />
+    <Property Name="CostType" Type="int" Nullable="false" />
+    <Property Name="Budget" Type="decimal" Nullable="false" />
+    <Property Name="Workspace_Id" Type="int" Nullable="false" />
+    <Property Name="ProjectManager_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tasks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="BeginWorkDate" Type="datetime" Nullable="false" />
+    <Property Name="EndWorkDate" Type="datetime" Nullable="false" />
+    <Property Name="SpentHours" Type="int" Nullable="false" />
+    <Property Name="EstimatedHours" Type="int" Nullable="false" />
+    <Property Name="CostType" Type="int" Nullable="false" />
+    <Property Name="CostValue" Type="decimal" Nullable="false" />
+    <Property Name="Project_Id" Type="int" Nullable="false" />
+    <Property Name="Responsible_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Meetings">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BeginDate" Type="datetime" Nullable="false" />
+    <Property Name="EndDate" Type="datetime" Nullable="false" />
+    <Property Name="AccessToken" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Organizer_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Invitations">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="InviteeEmail" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="InviationDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastSentDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Sender_Id" Type="int" Nullable="false" />
+    <Property Name="Invitee_Id" Type="int" Nullable="false" />
+    <Property Name="Project_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TaskComments">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="Author_Id" Type="int" Nullable="false" />
+    <Property Name="Task_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MeetingComments">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="Author_Id" Type="int" Nullable="false" />
+    <Property Name="Meeting_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TeamMates">
+    <Key>
+      <PropertyRef Name="User_Id" />
+      <PropertyRef Name="Project_Id" />
+    </Key>
+    <Property Name="User_Id" Type="int" Nullable="false" />
+    <Property Name="Project_Id" Type="int" Nullable="false" />
+    <Property Name="AccessLevelValue" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MeetingParticipants">
+    <Key>
+      <PropertyRef Name="Meetings_Id" />
+      <PropertyRef Name="Participants_Id" />
+    </Key>
+    <Property Name="Meetings_Id" Type="int" Nullable="false" />
+    <Property Name="Participants_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="WorkspaceProject">
+    <End Role="Workspace" Type="NProject.Models.Domain.Store.Workspaces" Multiplicity="1" />
+    <End Role="Project" Type="NProject.Models.Domain.Store.Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Workspace">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="Workspace_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserWorkspace">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="Workspace" Type="NProject.Models.Domain.Store.Workspaces" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Workspace">
+        <PropertyRef Name="Owner_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PMProjects">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="Project" Type="NProject.Models.Domain.Store.Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="ProjectManager_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProjectTask">
+    <End Role="Project" Type="NProject.Models.Domain.Store.Projects" Multiplicity="1" />
+    <End Role="Task" Type="NProject.Models.Domain.Store.Tasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="Project_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserTask">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="Task" Type="NProject.Models.Domain.Store.Tasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="Responsible_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserMeeting">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="Meeting" Type="NProject.Models.Domain.Store.Meetings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Meeting">
+        <PropertyRef Name="Organizer_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserInvitation">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="Invitation" Type="NProject.Models.Domain.Store.Invitations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invitation">
+        <PropertyRef Name="Sender_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserInvitation1">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="Invitation" Type="NProject.Models.Domain.Store.Invitations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invitation">
+        <PropertyRef Name="Invitee_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProjectInvitation">
+    <End Role="Project" Type="NProject.Models.Domain.Store.Projects" Multiplicity="1" />
+    <End Role="Invitation" Type="NProject.Models.Domain.Store.Invitations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invitation">
+        <PropertyRef Name="Project_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserComment">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="Comment" Type="NProject.Models.Domain.Store.TaskComments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="Author_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TaskTaskComment">
+    <End Role="Task" Type="NProject.Models.Domain.Store.Tasks" Multiplicity="1" />
+    <End Role="TaskComment" Type="NProject.Models.Domain.Store.TaskComments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Task">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TaskComment">
+        <PropertyRef Name="Task_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserMeetingComment">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="MeetingComment" Type="NProject.Models.Domain.Store.MeetingComments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MeetingComment">
+        <PropertyRef Name="Author_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MeetingMeetingComment">
+    <End Role="Meeting" Type="NProject.Models.Domain.Store.Meetings" Multiplicity="1" />
+    <End Role="MeetingComment" Type="NProject.Models.Domain.Store.MeetingComments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Meeting">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MeetingComment">
+        <PropertyRef Name="Meeting_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserTeamMate">
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <End Role="TeamMate" Type="NProject.Models.Domain.Store.TeamMates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TeamMate">
+        <PropertyRef Name="User_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProjectTeamMate">
+    <End Role="Project" Type="NProject.Models.Domain.Store.Projects" Multiplicity="1" />
+    <End Role="TeamMate" Type="NProject.Models.Domain.Store.TeamMates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TeamMate">
+        <PropertyRef Name="Project_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MeetingParticipants_Meeting">
+    <End Role="Meeting" Type="NProject.Models.Domain.Store.Meetings" Multiplicity="1" />
+    <End Role="MeetingParticipants" Type="NProject.Models.Domain.Store.MeetingParticipants" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Meeting">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MeetingParticipants">
+        <PropertyRef Name="Meetings_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MeetingParticipants_User">
+    <End Role="MeetingParticipants" Type="NProject.Models.Domain.Store.MeetingParticipants" Multiplicity="*" />
+    <End Role="User" Type="NProject.Models.Domain.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MeetingParticipants">
+        <PropertyRef Name="Participants_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="NProject.Models.Domain" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="NProjectEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="NProject.Models.Domain.User" />
+          <EntitySet Name="Workspaces" EntityType="NProject.Models.Domain.Workspace" />
+          <EntitySet Name="Projects" EntityType="NProject.Models.Domain.Project" />
+          <AssociationSet Name="WorkspaceProject" Association="NProject.Models.Domain.WorkspaceProject">
+            <End Role="Workspace" EntitySet="Workspaces" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+          <AssociationSet Name="UserWorkspace" Association="NProject.Models.Domain.UserWorkspace">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Workspace" EntitySet="Workspaces" />
+          </AssociationSet>
+          <AssociationSet Name="PMProjects" Association="NProject.Models.Domain.PMProjects">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+          <EntitySet Name="Tasks" EntityType="NProject.Models.Domain.Task" />
+          <AssociationSet Name="ProjectTask" Association="NProject.Models.Domain.ProjectTask">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="UserTask" Association="NProject.Models.Domain.UserTask">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <EntitySet Name="Meetings" EntityType="NProject.Models.Domain.Meeting" />
+          <AssociationSet Name="UserMeeting" Association="NProject.Models.Domain.UserMeeting">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Meeting" EntitySet="Meetings" />
+          </AssociationSet>
+          <AssociationSet Name="MeetingParticipants" Association="NProject.Models.Domain.MeetingParticipants">
+            <End Role="Meeting" EntitySet="Meetings" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="Invitations" EntityType="NProject.Models.Domain.Invitation" />
+          <AssociationSet Name="UserInvitation" Association="NProject.Models.Domain.UserInvitation">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Invitation" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="UserInvitation1" Association="NProject.Models.Domain.UserInvitation1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Invitation" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="ProjectInvitation" Association="NProject.Models.Domain.ProjectInvitation">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Invitation" EntitySet="Invitations" />
+          </AssociationSet>
+          <EntitySet Name="TaskComments" EntityType="NProject.Models.Domain.TaskComment" />
+          <AssociationSet Name="UserComment" Association="NProject.Models.Domain.UserComment">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Comment" EntitySet="TaskComments" />
+          </AssociationSet>
+          <AssociationSet Name="TaskTaskComment" Association="NProject.Models.Domain.TaskTaskComment">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="TaskComment" EntitySet="TaskComments" />
+          </AssociationSet>
+          <EntitySet Name="MeetingComments" EntityType="NProject.Models.Domain.MeetingComment" />
+          <AssociationSet Name="UserMeetingComment" Association="NProject.Models.Domain.UserMeetingComment">
+            <End Role="User" EntitySet="Users" />
+            <End Role="MeetingComment" EntitySet="MeetingComments" />
+          </AssociationSet>
+          <AssociationSet Name="MeetingMeetingComment" Association="NProject.Models.Domain.MeetingMeetingComment">
+            <End Role="Meeting" EntitySet="Meetings" />
+            <End Role="MeetingComment" EntitySet="MeetingComments" />
+          </AssociationSet>
+          <EntitySet Name="TeamMates" EntityType="NProject.Models.Domain.TeamMate" />
+          <AssociationSet Name="UserTeamMate" Association="NProject.Models.Domain.UserTeamMate">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TeamMate" EntitySet="TeamMates" />
+          </AssociationSet>
+          <AssociationSet Name="ProjectTeamMate" Association="NProject.Models.Domain.ProjectTeamMate">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="TeamMate" EntitySet="TeamMates" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="30" Unicode="true" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" Unicode="true" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="HoursOffsetFromUTC" Nullable="false" DefaultValue="0" >
+            <Documentation>
+              <Summary>sdfsdf</Summary>
+            </Documentation>
+          </Property>
+          <Property Type="Int32" Name="AccountType" Nullable="false" />
+          <Property Type="DateTime" Name="RegistrationDate" Nullable="false" />
+          <NavigationProperty Name="OwnedWorkspaces" Relationship="NProject.Models.Domain.UserWorkspace" FromRole="User" ToRole="Workspace" />
+          <NavigationProperty Name="ManagedProjects" Relationship="NProject.Models.Domain.PMProjects" FromRole="User" ToRole="Project" />
+          <NavigationProperty Name="Tasks" Relationship="NProject.Models.Domain.UserTask" FromRole="User" ToRole="Task" />
+          <NavigationProperty Name="OrganizedMeetings" Relationship="NProject.Models.Domain.UserMeeting" FromRole="User" ToRole="Meeting" />
+          <NavigationProperty Name="Meetings" Relationship="NProject.Models.Domain.MeetingParticipants" FromRole="User" ToRole="Meeting" />
+          <NavigationProperty Name="SentInvitations" Relationship="NProject.Models.Domain.UserInvitation" FromRole="User" ToRole="Invitation" />
+          <NavigationProperty Name="ReceivedInvitations" Relationship="NProject.Models.Domain.UserInvitation1" FromRole="User" ToRole="Invitation" />
+          <NavigationProperty Name="Comments" Relationship="NProject.Models.Domain.UserComment" FromRole="User" ToRole="Comment" />
+          <Property Type="String" Name="PasswordHash" Nullable="false" MaxLength="50" />
+          <NavigationProperty Name="MeetingComments" Relationship="NProject.Models.Domain.UserMeetingComment" FromRole="User" ToRole="MeetingComment" />
+          <NavigationProperty Name="TeamMates" Relationship="NProject.Models.Domain.UserTeamMate" FromRole="User" ToRole="TeamMate" />
+          <Property Type="String" Name="Language" Nullable="false" DefaultValue="en-us" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Workspace">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <NavigationProperty Name="Projects" Relationship="NProject.Models.Domain.WorkspaceProject" FromRole="Workspace" ToRole="Project" />
+          <NavigationProperty Name="Owner" Relationship="NProject.Models.Domain.UserWorkspace" FromRole="Workspace" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
+          <Property Type="DateTime" Name="EndDate" Nullable="false" />
+          <Property Type="Int32" Name="CostType" Nullable="false" />
+          <NavigationProperty Name="Workspace" Relationship="NProject.Models.Domain.WorkspaceProject" FromRole="Project" ToRole="Workspace" />
+          <NavigationProperty Name="ProjectManager" Relationship="NProject.Models.Domain.PMProjects" FromRole="Project" ToRole="User" />
+          <NavigationProperty Name="Tasks" Relationship="NProject.Models.Domain.ProjectTask" FromRole="Project" ToRole="Task" />
+          <NavigationProperty Name="Invitations" Relationship="NProject.Models.Domain.ProjectInvitation" FromRole="Project" ToRole="Invitation" />
+          <Property Type="Decimal" Name="Budget" Nullable="false" />
+          <NavigationProperty Name="Team" Relationship="NProject.Models.Domain.ProjectTeamMate" FromRole="Project" ToRole="TeamMate" />
+        </EntityType>
+        <Association Name="WorkspaceProject">
+          <End Type="NProject.Models.Domain.Workspace" Role="Workspace" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Project" Role="Project" Multiplicity="*" />
+        </Association>
+        <Association Name="UserWorkspace">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Workspace" Role="Workspace" Multiplicity="*" />
+        </Association>
+        <Association Name="PMProjects">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Project" Role="Project" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
+          <Property Type="DateTime" Name="BeginWorkDate" Nullable="false" />
+          <Property Type="DateTime" Name="EndWorkDate" Nullable="false" />
+          <Property Type="Int32" Name="SpentHours" Nullable="false" />
+          <Property Type="Int32" Name="EstimatedHours" Nullable="false" />
+          <Property Type="Int32" Name="CostType" Nullable="false" />
+          <Property Type="Decimal" Name="CostValue" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="NProject.Models.Domain.ProjectTask" FromRole="Task" ToRole="Project" />
+          <NavigationProperty Name="Responsible" Relationship="NProject.Models.Domain.UserTask" FromRole="Task" ToRole="User" />
+          <NavigationProperty Name="TaskComments" Relationship="NProject.Models.Domain.TaskTaskComment" FromRole="Task" ToRole="TaskComment" />
+          </EntityType>
+        <Association Name="ProjectTask">
+          <End Type="NProject.Models.Domain.Project" Role="Project" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Task" Role="Task" Multiplicity="*" />
+        </Association>
+        <Association Name="UserTask">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Task" Role="Task" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Meeting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Title" Nullable="false" />
+          <Property Type="DateTime" Name="BeginDate" Nullable="false" />
+          <Property Type="DateTime" Name="EndDate" Nullable="false" />
+          <NavigationProperty Name="Organizer" Relationship="NProject.Models.Domain.UserMeeting" FromRole="Meeting" ToRole="User" />
+          <NavigationProperty Name="Participants" Relationship="NProject.Models.Domain.MeetingParticipants" FromRole="Meeting" ToRole="User" />
+          <Property Type="Guid" Name="AccessToken" Nullable="false" />
+          <NavigationProperty Name="MeetingComments" Relationship="NProject.Models.Domain.MeetingMeetingComment" FromRole="Meeting" ToRole="MeetingComment" />
+        </EntityType>
+        <Association Name="UserMeeting">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Meeting" Role="Meeting" Multiplicity="*" />
+        </Association>
+        <Association Name="MeetingParticipants">
+          <End Type="NProject.Models.Domain.Meeting" Role="Meeting" Multiplicity="*" />
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Invitation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Status" Nullable="false" />
+          <Property Type="String" Name="InviteeEmail" Nullable="false" />
+          <Property Type="String" Name="InviationDate" Nullable="false" />
+          <Property Type="String" Name="LastSentDate" Nullable="false" />
+          <NavigationProperty Name="Sender" Relationship="NProject.Models.Domain.UserInvitation" FromRole="Invitation" ToRole="User" />
+          <NavigationProperty Name="Invitee" Relationship="NProject.Models.Domain.UserInvitation1" FromRole="Invitation" ToRole="User" />
+          <NavigationProperty Name="Project" Relationship="NProject.Models.Domain.ProjectInvitation" FromRole="Invitation" ToRole="Project" />
+        </EntityType>
+        <Association Name="UserInvitation">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Invitation" Role="Invitation" Multiplicity="*" />
+        </Association>
+        <Association Name="UserInvitation1">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Invitation" Role="Invitation" Multiplicity="*" />
+        </Association>
+        <Association Name="ProjectInvitation">
+          <End Type="NProject.Models.Domain.Project" Role="Project" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.Invitation" Role="Invitation" Multiplicity="*" />
+        </Association>
+        <EntityType Name="TaskComment" Abstract="false">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Text" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
+          <NavigationProperty Name="Author" Relationship="NProject.Models.Domain.UserComment" FromRole="Comment" ToRole="User" />
+          <NavigationProperty Name="Task" Relationship="NProject.Models.Domain.TaskTaskComment" FromRole="TaskComment" ToRole="Task" />
+        </EntityType>
+        <Association Name="UserComment">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.TaskComment" Role="Comment" Multiplicity="*" />
+        </Association>
+        <Association Name="TaskTaskComment">
+          <End Type="NProject.Models.Domain.Task" Role="Task" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.TaskComment" Role="TaskComment" Multiplicity="*" />
+        </Association>
+        <EntityType Name="MeetingComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Text" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
+          <NavigationProperty Name="Author" Relationship="NProject.Models.Domain.UserMeetingComment" FromRole="MeetingComment" ToRole="User" />
+          <NavigationProperty Name="Meeting" Relationship="NProject.Models.Domain.MeetingMeetingComment" FromRole="MeetingComment" ToRole="Meeting" />
+        </EntityType>
+        <Association Name="UserMeetingComment">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.MeetingComment" Role="MeetingComment" Multiplicity="*" />
+        </Association>
+        <Association Name="MeetingMeetingComment">
+          <End Type="NProject.Models.Domain.Meeting" Role="Meeting" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.MeetingComment" Role="MeetingComment" Multiplicity="*" />
+        </Association>
+        <EntityType Name="TeamMate">
+          <Key>
+            <PropertyRef Name="User_Id" />
+            <PropertyRef Name="Project_Id" />
+          </Key>
+          <Property Type="Int32" Name="User_Id" Nullable="false" />
+          <Property Type="Int32" Name="Project_Id" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="NProject.Models.Domain.UserTeamMate" FromRole="TeamMate" ToRole="User" />
+          <NavigationProperty Name="Project" Relationship="NProject.Models.Domain.ProjectTeamMate" FromRole="TeamMate" ToRole="Project" />
+          <Property Type="Int32" Name="AccessLevelValue" Nullable="false" />
+        </EntityType>
+        <Association Name="UserTeamMate">
+          <End Type="NProject.Models.Domain.User" Role="User" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.TeamMate" Role="TeamMate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TeamMate">
+              <PropertyRef Name="User_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProjectTeamMate">
+          <End Type="NProject.Models.Domain.Project" Role="Project" Multiplicity="1" />
+          <End Type="NProject.Models.Domain.TeamMate" Role="TeamMate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TeamMate">
+              <PropertyRef Name="Project_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="NProjectModelsDomainStoreContainer" CdmEntityContainer="NProjectEntities">
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="HoursOffsetFromUTC" ColumnName="HoursOffsetFromUTC" />
+          <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+          <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Workspaces">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.Workspace)">
+        <MappingFragment StoreEntitySet="Workspaces">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Projects">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.Project)">
+        <MappingFragment StoreEntitySet="Projects">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="CostType" ColumnName="CostType" />
+          <ScalarProperty Name="Budget" ColumnName="Budget" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tasks">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.Task)">
+        <MappingFragment StoreEntitySet="Tasks">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="BeginWorkDate" ColumnName="BeginWorkDate" />
+          <ScalarProperty Name="EndWorkDate" ColumnName="EndWorkDate" />
+          <ScalarProperty Name="SpentHours" ColumnName="SpentHours" />
+          <ScalarProperty Name="EstimatedHours" ColumnName="EstimatedHours" />
+          <ScalarProperty Name="CostType" ColumnName="CostType" />
+          <ScalarProperty Name="CostValue" ColumnName="CostValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Meetings">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.Meeting)">
+        <MappingFragment StoreEntitySet="Meetings">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Invitations">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.Invitation)">
+        <MappingFragment StoreEntitySet="Invitations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="InviteeEmail" ColumnName="InviteeEmail" />
+          <ScalarProperty Name="InviationDate" ColumnName="InviationDate" />
+          <ScalarProperty Name="LastSentDate" ColumnName="LastSentDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TaskComments">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.TaskComment)">
+        <MappingFragment StoreEntitySet="TaskComments">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MeetingComments">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.MeetingComment)">
+        <MappingFragment StoreEntitySet="MeetingComments">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TeamMates">
+      <EntityTypeMapping TypeName="IsTypeOf(NProject.Models.Domain.TeamMate)">
+        <MappingFragment StoreEntitySet="TeamMates">
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+          <ScalarProperty Name="Project_Id" ColumnName="Project_Id" />
+          <ScalarProperty Name="AccessLevelValue" ColumnName="AccessLevelValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="WorkspaceProject" TypeName="NProject.Models.Domain.WorkspaceProject" StoreEntitySet="Projects">
+      <EndProperty Name="Workspace">
+        <ScalarProperty Name="Id" ColumnName="Workspace_Id" />
+      </EndProperty>
+      <EndProperty Name="Project">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserWorkspace" TypeName="NProject.Models.Domain.UserWorkspace" StoreEntitySet="Workspaces">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Owner_Id" />
+      </EndProperty>
+      <EndProperty Name="Workspace">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PMProjects" TypeName="NProject.Models.Domain.PMProjects" StoreEntitySet="Projects">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="ProjectManager_Id" />
+      </EndProperty>
+      <EndProperty Name="Project">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ProjectTask" TypeName="NProject.Models.Domain.ProjectTask" StoreEntitySet="Tasks">
+      <EndProperty Name="Project">
+        <ScalarProperty Name="Id" ColumnName="Project_Id" />
+      </EndProperty>
+      <EndProperty Name="Task">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserTask" TypeName="NProject.Models.Domain.UserTask" StoreEntitySet="Tasks">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Responsible_Id" />
+      </EndProperty>
+      <EndProperty Name="Task">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserMeeting" TypeName="NProject.Models.Domain.UserMeeting" StoreEntitySet="Meetings">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Organizer_Id" />
+      </EndProperty>
+      <EndProperty Name="Meeting">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MeetingParticipants" TypeName="NProject.Models.Domain.MeetingParticipants" StoreEntitySet="MeetingParticipants">
+      <EndProperty Name="Meeting">
+        <ScalarProperty Name="Id" ColumnName="Meetings_Id" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Participants_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserInvitation" TypeName="NProject.Models.Domain.UserInvitation" StoreEntitySet="Invitations">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Sender_Id" />
+      </EndProperty>
+      <EndProperty Name="Invitation">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserInvitation1" TypeName="NProject.Models.Domain.UserInvitation1" StoreEntitySet="Invitations">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Invitee_Id" />
+      </EndProperty>
+      <EndProperty Name="Invitation">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ProjectInvitation" TypeName="NProject.Models.Domain.ProjectInvitation" StoreEntitySet="Invitations">
+      <EndProperty Name="Project">
+        <ScalarProperty Name="Id" ColumnName="Project_Id" />
+      </EndProperty>
+      <EndProperty Name="Invitation">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserComment" TypeName="NProject.Models.Domain.UserComment" StoreEntitySet="TaskComments">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Author_Id" />
+      </EndProperty>
+      <EndProperty Name="Comment">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TaskTaskComment" TypeName="NProject.Models.Domain.TaskTaskComment" StoreEntitySet="TaskComments">
+      <EndProperty Name="Task">
+        <ScalarProperty Name="Id" ColumnName="Task_Id" />
+      </EndProperty>
+      <EndProperty Name="TaskComment">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserMeetingComment" TypeName="NProject.Models.Domain.UserMeetingComment" StoreEntitySet="MeetingComments">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Author_Id" />
+      </EndProperty>
+      <EndProperty Name="MeetingComment">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MeetingMeetingComment" TypeName="NProject.Models.Domain.MeetingMeetingComment" StoreEntitySet="MeetingComments">
+      <EndProperty Name="Meeting">
+        <ScalarProperty Name="Id" ColumnName="Meeting_Id" />
+      </EndProperty>
+      <EndProperty Name="MeetingComment">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="DatabaseGenerationWorkflow" Value="$(VSEFTools)\DBGen\TablePerTypeStrategy.xaml" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="ProcessDependentTemplatesOnSave" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram Name="NProjectEntities" ZoomLevel="95" DisplayType="false" ShowGrid="false" >
+        <EntityTypeShape EntityType="NProject.Models.Domain.User" Width="1.75" PointX="5" PointY="2.75" Height="4.6725065104166665" />
+        <EntityTypeShape EntityType="NProject.Models.Domain.Workspace" Width="1.5" PointX="7.5" PointY="4.5" Height="2.172587890625" />
+        <EntityTypeShape EntityType="NProject.Models.Domain.Project" Width="1.5" PointX="9.75" PointY="3.875" Height="3.3263964843749996" />
+        <AssociationConnector Association="NProject.Models.Domain.WorkspaceProject">
+          <ConnectorPoint PointX="9" PointY="5.5862939453125" />
+          <ConnectorPoint PointX="9.75" PointY="5.5862939453125" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.UserWorkspace">
+          <ConnectorPoint PointX="6.75" PointY="5.5862939453125" />
+          <ConnectorPoint PointX="7.5" PointY="5.5862939453125" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.PMProjects">
+          <ConnectorPoint PointX="6.75" PointY="4.15625" />
+          <ConnectorPoint PointX="9.75" PointY="4.15625" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="NProject.Models.Domain.Task" Width="1.5" PointX="12" PointY="3.875" Height="3.5186979166666656" />
+        <AssociationConnector Association="NProject.Models.Domain.ProjectTask">
+          <ConnectorPoint PointX="11.25" PointY="5.5381982421875" />
+          <ConnectorPoint PointX="12" PointY="5.5381982421875" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.UserTask">
+          <ConnectorPoint PointX="6.75" PointY="3.5896355478710458" />
+          <ConnectorPoint PointX="10.105344242756161" PointY="3.5896355478710453" />
+          <ConnectorPoint PointX="10.272010909422829" PointY="3.5896355478710458" />
+          <ConnectorPoint PointX="12.75" PointY="3.5896355478710458" />
+          <ConnectorPoint PointX="12.75" PointY="3.875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="NProject.Models.Domain.Meeting" Width="1.5" PointX="5.125" PointY="8.5" Height="2.5571907552083335" />
+        <AssociationConnector Association="NProject.Models.Domain.UserMeeting">
+          <ConnectorPoint PointX="5.859374" PointY="7.4225065104166665" />
+          <ConnectorPoint PointX="5.859374" PointY="8.5" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.MeetingParticipants">
+          <ConnectorPoint PointX="6.3046869999999995" PointY="8.5" />
+          <ConnectorPoint PointX="6.3046869999999995" PointY="7.4225065104166665" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="NProject.Models.Domain.Invitation" Width="1.5" PointX="9.75" PointY="0.5" Height="2.5571907552083326" IsExpanded="true" />
+        <AssociationConnector Association="NProject.Models.Domain.UserInvitation">
+          <ConnectorPoint PointX="6.2386574340663339" PointY="2.75" />
+          <ConnectorPoint PointX="6.2386574340663339" PointY="1.842548266927083" />
+          <ConnectorPoint PointX="9.75" PointY="1.842548266927083" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.UserInvitation1">
+          <ConnectorPoint PointX="5.5880762170331675" PointY="2.75" />
+          <ConnectorPoint PointX="5.5880762170331675" PointY="1.1400216334635409" />
+          <ConnectorPoint PointX="9.75" PointY="1.1400216334635409" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.ProjectInvitation" ManuallyRouted="false">
+          <ConnectorPoint PointX="10.188677576089495" PointY="3.875" />
+          <ConnectorPoint PointX="10.188677576089495" PointY="3.0571907552083326" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="NProject.Models.Domain.TaskComment" Width="1.5" PointX="14" PointY="5.125" Height="1.9802864583333335" />
+        <AssociationConnector Association="NProject.Models.Domain.UserComment">
+          <ConnectorPoint PointX="6.75" PointY="3.323410651539688" />
+          <ConnectorPoint PointX="10.105344242756161" PointY="3.3234106515396875" />
+          <ConnectorPoint PointX="10.272010909422829" PointY="3.323410651539688" />
+          <ConnectorPoint PointX="14.75" PointY="3.323410651539688" />
+          <ConnectorPoint PointX="14.75" PointY="5.125" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.TaskTaskComment">
+          <ConnectorPoint PointX="13.5" PointY="6.1151432291666667" />
+          <ConnectorPoint PointX="14" PointY="6.1151432291666667" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="NProject.Models.Domain.MeetingComment" Width="1.5" PointX="3" PointY="7.125" Height="1.9802864583333335" />
+        <AssociationConnector Association="NProject.Models.Domain.UserMeetingComment">
+          <ConnectorPoint PointX="5.398435" PointY="7.4225065104166665" />
+          <ConnectorPoint PointX="5.398435" PointY="8.1151432291666659" />
+          <ConnectorPoint PointX="4.5" PointY="8.1151432291666659" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.MeetingMeetingComment">
+          <ConnectorPoint PointX="5.125" PointY="8.8026432291666659" />
+          <ConnectorPoint PointX="4.5" PointY="8.8026432291666659" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="NProject.Models.Domain.TeamMate" Width="1.5" PointX="7.5" PointY="7" Height="1.9802864583333326" />
+        <AssociationConnector Association="NProject.Models.Domain.UserTeamMate">
+          <ConnectorPoint PointX="6.75" PointY="7.2112532552083337" />
+          <ConnectorPoint PointX="7.5" PointY="7.2112532552083337" />
+        </AssociationConnector>
+        <AssociationConnector Association="NProject.Models.Domain.ProjectTeamMate">
+          <ConnectorPoint PointX="10.5" PointY="7.201396484375" />
+          <ConnectorPoint PointX="10.5" PointY="8.4276432291666659" />
+          <ConnectorPoint PointX="9" PointY="8.4276432291666659" />
+        </AssociationConnector>
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

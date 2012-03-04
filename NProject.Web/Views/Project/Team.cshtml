@@ -1,0 +1,44 @@
+﻿@model NProject.Web.ViewModels.Project.TeamList
+
+@{
+    ViewBag.Title = "Team";
+    Layout = "~/Views/Shared/Site.Layout.cshtml";
+}
+
+<h2>Team</h2>
+
+<b>Project Manager: </b> @Model.ProjectManager.Name @if(Model.CanChangePM) {<text> <a href="#">Change him</a></text>}
+<div class="row" style="margin-bottom: 5px;">
+  <div class="pull-right">
+        <a class="btn btn-success btn-small" href="@Url.Action("Invite", "Project", new {id=Model.ProjectId})">
+            <i class="icon-plus"></i> Add
+        </a>
+  </div>
+</div>
+<table class="table table-striped">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Mode
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Team)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditTeamMate", new {id = Model.ProjectId, userId = item.UserId}) | 
+            @Html.ActionLink("Remove", "RemoveStaff", new {id = Model.ProjectId, userId = item.UserId})
+        </td>
+    </tr>
+}
+
+</table>

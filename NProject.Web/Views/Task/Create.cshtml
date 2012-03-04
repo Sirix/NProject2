@@ -1,0 +1,19 @@
+﻿@model NProject.Web.ViewModels.Task.Form
+@{
+    ViewBag.Title = "Create new task";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Create</title>
+</head>
+<body>
+    
+@{Html.RenderPartial("_form", Model);}
+    
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</body>
+</html>

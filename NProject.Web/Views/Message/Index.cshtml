@@ -1,0 +1,15 @@
+﻿@model List<String>
+
+@{
+    ViewBag.Title = "My Messages";
+    Layout = "~/Views/Shared/Site.Layout.cshtml";
+}
+
+<h2>My received invitations</h2>
+
+<table class="table table-striped">
+@foreach (string s in Model)
+{ 
+    <tr>@s</tr>
+}
+</table>

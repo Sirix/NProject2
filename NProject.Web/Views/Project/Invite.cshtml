@@ -1,0 +1,75 @@
+﻿@model Dictionary<int, string>
+@{
+    ViewBag.Title = "Invite";
+    Layout = "~/Views/Shared/Site.Layout.cshtml";
+}
+<script language="javascript" src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+<br><br>
+<h4>Invite user by email</h4>
+@using (Html.BeginForm()) { }
+
+     <input type="text" name="emails" id="singleEmail" />
+     <input type="button" class="btn btn-primary" value="Invite" onclick="javascript:postSingleEmail(this);" />      
+     <span id="singleEmailSubmitMessage" style="color: blue"></span>
+    
+     <hr /><h4>Or from your another projects in this workspace</h4>
+<div class="row">
+    <div class="span6">
+        <div data-toggle="buttons-checkbox">
+        @foreach (var user in Model)
+        {
+            <div>
+                <button class="btn btn-small" data-userId="@user.Key" onclick="javascript:updateEmails(this);">
+                    <i class="icon-user"></i> Invite @user.Value
+                </button>
+                <hr style="margin-bottom: 15px" />
+            </div>
+        }
+        </div>
+    </div>
+    <div class="span6">
+        <input type="button" value="Send invites" class="btn btn-large btn-primary hide" id="submitEmails" onclick="javascript:postMultipleEmails();"  />
+    </div>
+</div>
+<script type="text/javascript">
+    var userIds = Array();
+    
+    function updateEmails(sender) {
+        sender = $(sender);
+        sender.toggleClass('btn-success');
+        var userId = sender.attr('data-userId');
+        var index = userIds.indexOf(userId);
+        if (index > -1)
+            userIds.splice(index, 1);
+        else
+            userIds.push(userId);
+
+        console.log(userIds.length);
+        $('#submitEmails').toggle(userIds.length > 0);
+    }
+
+    function postMultipleEmails() {
+        $.ajaxSettings.traditional = true;
+        $.post(document.URL, { userIds: userIds }, function (data) {
+            $('.btn.active').each(function (i, v) { $(v).parent().fadeOut(); });
+            userIds = new Array();
+            $('#submitEmails').toggle(userIds.length > 0);
+            /* window.location = '@(Url.Action("Team", new {id=ViewBag.Id}))'; */
+            alert(data);
+        });
+    }
+
+    function postSingleEmail(senderBtn) {
+        var email = $('#singleEmail').val();
+        if (email == '') return;
+        $(senderBtn).attr('disabled', 'disabled');
+        $.post(document.URL, { email: email }, function (data) {
+            $('#singleEmailSubmitMessage').show();
+            $('#singleEmailSubmitMessage').html('You have sent the invitation to ' + email);
+            $('#singleEmailSubmitMessage').fadeOut(2500);
+            $('#singleEmail').val('');
+            $(senderBtn).removeAttr('disabled');
+            alert(data);
+        });
+    }
+</script>

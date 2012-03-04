@@ -1,0 +1,15 @@
+﻿@using NProject.Web.Helpers
+@helper ConvertUtcToUserTime(DateTime dt)
+{
+    @(dt.AddHours(SessionStorage.User.HoursOffsetFromUtc))
+}
+@helper RenderBreadcrumbs(Dictionary<string,string> values)
+{
+    <ul class="breadcrumb">
+        @for (int i = 0; i < values.Count-1; i++)
+        {
+            <li><a href="@values.ElementAt(i).Key">@values.ElementAt(i).Value</a> <span class="divider">/</span></li>
+        }
+        <li class="active">@values.ElementAt(values.Count-1).Value</li>
+    </ul>
+}

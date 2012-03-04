@@ -1,0 +1,102 @@
+﻿@model NProject.Web.ViewModels.Task.Form
+           
+<style>
+span.field-validation-error
+{
+    display:block;
+    color:#B94A48;
+}
+</style>
+    @using (Html.BeginForm()) {
+        @Html.ValidationSummary(true)
+        
+        <fieldset>
+            <legend>New task</legend>
+    <div style="float:left">
+            <div class="control-group">
+                @Html.LabelFor(model => model.Task.Name)
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.Task.Name, new {@class="span8"})
+                    @Html.ValidationMessageFor(model => model.Task.Name)
+                </div>
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Task.Description)
+            </div>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Task.Description, new { @class = "span8", rows=6 })
+                @Html.ValidationMessageFor(model => model.Task.Description)
+            </div>
+    
+@*            <div class="editor-label">
+                @Html.LabelFor(model => model.Task.BeginWorkDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Task.BeginWorkDate)
+                @Html.ValidationMessageFor(model => model.Task.BeginWorkDate)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Task.EstimatedHours)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Task.EstimatedHours)
+                @Html.ValidationMessageFor(model => model.Task.EstimatedHours)
+            </div>*@
+            <p>
+                <input type="submit" class="btn btn-large btn-primary" value="Save" />
+            </p>
+            </div>
+                    
+        <div style="margin-left: 10px;float:left">
+         <div class="editor-label">
+                @Html.LabelFor(model => model.Task.Responsible)
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model=>model.Task.ResponsibleId, Model.Users)
+                @Html.ValidationMessageFor(model => model.Task.Responsible)
+            </div>
+       
+       <label style="text-align:center"><a href="#" onclick="$('#financeBlock').toggle()">Finance</a></label>
+       <div id="financeBlock" class="hide">
+        <div class="editor-label">
+                @Html.LabelFor(model => model.Task.CostType)
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model=>model.Task.CostType, Model.CostTypes)
+                @Html.ValidationMessageFor(model => model.Task.CostType)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Task.CostValue)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Task.CostValue)
+                @Html.ValidationMessageFor(model => model.Task.CostValue)
+            </div>
+        </div>
+        
+        </div>
+        @Html.HiddenFor(model=>model.Task.ProjectId)
+        </fieldset>
+
+        <div style="clear: both"></div>
+    }
+@*    <script language="javascript" type="text/javascript">
+        $('form').submit(function () {
+            if ($(this).valid()) {
+                $(this).find('div.control-group').each(function () {
+                    if ($(this).find('span.field-validation-error').length == 0) {
+                        $(this).removeClass('error');
+                    }
+                });
+            }
+            else {
+                $(this).find('div.control-group').each(function () {
+                    if ($(this).find('span.field-validation-error').length > 0) {
+                        $(this).addClass('error');
+                    }
+                });
+            }
+        });
+    </script>*@

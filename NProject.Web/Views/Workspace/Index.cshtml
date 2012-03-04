@@ -1,0 +1,45 @@
+﻿@model IEnumerable<NProject.Models.Domain.Workspace>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Site.Layout.cshtml";
+}
+
+<h2>Here is all your workspaces</h2>
+
+<div class="row" style="margin-bottom: 5px;">
+  <div class="pull-right">
+        <a class="btn btn-success btn-small" href="@Url.Action("Create", "Workspace")">
+            <i class="icon-plus"></i> Create
+        </a>
+  </div>
+</div>
+<table class="table table-striped">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            CreationDate
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+           @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToHtmlString(), "Show", new { id=item.Id })<br />
+           <i><small>@item.Description</small></i>
+        </td>
+        <td>
+            @RazorHelpers.ConvertUtcToUserTime(item.CreationDate)
+        </td>
+        <td>
+            
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

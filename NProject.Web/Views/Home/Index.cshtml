@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "NProject";
+    Layout = "~/Views/Shared/Site.Layout.cshtml";
+}
+
+     <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Hello to NProject!</h1>
+        <p>NProject is a lightweight porject management system</p>
+           @using (Html.BeginForm("SimpleRegistration", "Account")) {
+            @Html.AntiForgeryToken()
+            <text>E-mail:</text> @Html.TextBox("Email")
+        <input type="submit" value="Register!" class="btn primary large" />
+    }
+</div>
