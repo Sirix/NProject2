@@ -106,6 +106,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\MultipleKeyDictionary.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\SessionStorage.cs" />
     <Compile Include="Infrastructure\Md5Helper.cs" />
@@ -113,6 +114,8 @@
     <Compile Include="Helpers\ControllerExtension.cs" />
     <Compile Include="Models\MeetingsListViewModel.cs" />
     <Compile Include="ViewModels\Account\SimpleRegistration.cs" />
+    <Compile Include="ViewModels\Home\Settings.cs" />
+    <Compile Include="ViewModels\Meeting\Create.cs" />
     <Compile Include="ViewModels\ProjectListViewModel.cs" />
     <Compile Include="Models\TaskFormViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,19 +123,27 @@
     <Compile Include="Services\TaskService.cs" />
     <Compile Include="ViewModels\Project\CreateForm.cs" />
     <Compile Include="ViewModels\Project\EditTeamMate.cs" />
+    <Compile Include="ViewModels\Project\Shared.cs" />
     <Compile Include="ViewModels\Project\TeamList.cs" />
-    <Compile Include="ViewModels\SiteMasterViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\Task\Form.cs" />
-    <Compile Include="ViewModels\Task\TaskListViewModel.cs" />
+    <Compile Include="ViewModels\Task\List.cs" />
+    <Compile Include="ViewModels\Task\Show.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="img\glyphicons-halflings-white.png" />
     <Content Include="img\glyphicons-halflings.png" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-modal.js" />
+    <Content Include="Scripts\bootstrap-transition.js" />
+    <Content Include="Scripts\bootstrap-typeahead.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery.globalize.culture.ru-RU.js" />
+    <Content Include="Scripts\jquery.globalize.js" />
     <Content Include="Views\Account\Edit.aspx" />
     <Content Include="Views\Account\List.aspx" />
     <Content Include="Views\Shared\AccessError.aspx" />
@@ -144,10 +155,8 @@
     <Content Include="Views\Project\List.aspx" />
     <Content Include="Views\Project\ProjectTasks.aspx" />
     <Content Include="Views\Project\RemoveStaff.aspx" />
-    <Content Include="Views\Project\Team-OLD.aspx" />
     <Content Include="Views\Task\AddToProject.aspx" />
     <Content Include="Views\Task\Complete.aspx" />
-    <Content Include="Views\Task\Edit.aspx" />
     <Content Include="Views\Task\AtProject.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -209,6 +218,10 @@
     <ProjectReference Include="..\NProject.Models\NProject.Models.csproj">
       <Project>{43DB37C3-08F3-44C2-BF93-E3BC1FC0F6D5}</Project>
       <Name>NProject.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NProject.Resources\NProject.Resources.csproj">
+      <Project>{60502D51-8245-4815-9963-A3BCB16B507C}</Project>
+      <Name>NProject.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -273,6 +286,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Task\_form.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Task\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Task\Show.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Project\Shared.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Settings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Meeting\Create.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

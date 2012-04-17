@@ -66,7 +66,56 @@ namespace NProject.BLL
 
         public void SendInvite(int inviteeId, int senderId, int projectId)
         {
-          //  Database.Invitations.Add(new Invitation {InviteeId = inviteeId, SenderId = senderId, ProjectId = projectId});
+            Database.Invitations.Add(new Invitation
+                                         {
+                                             Invitee = Database.Users.First(u => u.Id == inviteeId),
+                                             Sender = Database.Users.First(u => u.Id == senderId),
+                                             ProjectId = projectId
+                                         });
+            Database.SaveChanges();
+        }
+
+        public Invitation GetInvitation(int id)
+        {
+            return Database.Invitations.FirstOrDefault(i => i.Id == id);
+        }
+
+        public string ProcessInvitation(Invitation invitation, string verb, int userId)
+        {
+            string result = "Error";
+            switch (verb)
+            {
+                case "accept":
+                    Database.TeamMates.Add(new TeamMate
+                                               {
+                                                   ProjectId = invitation.ProjectId,
+                                                   UserId = userId,
+                                                   AccessLevel = invitation.AccessLevel
+                                               });
+                    invitation.Status = InvitationStatus.Accepted;
+                    result = "You have successfully accepted the invitation";
+                    break;
+                case "decline":
+                    invitation.Status = InvitationStatus.Declined;
+                    result = "You have declined the invitation";
+                    break;
+                case "block":
+                    invitation.Status = InvitationStatus.Blocked;
+                    result = "You have blocked invitations to this project";
+                    break;
+
+            }
+            Database.SaveChanges();
+            return result;
+        }
+
+        public void SaveSettings(int userId, byte hoursOffset, string locale)
+        {
+            var user = Database.Users.FirstOrDefault(u => u.Id == userId);
+            user.HoursOffsetFromUtc = hoursOffset;
+            user.Language = locale;
+
+            Database.ObjectContext.ApplyCurrentValues("Users", user);
             Database.SaveChanges();
         }
     }

@@ -1,0 +1,24 @@
+﻿@model NProject.Web.ViewModels.Project.Shared
+
+@{
+    ViewBag.Title = "Shared projects";
+}
+
+<h2>My shared projects</h2>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            Name
+        </th>
+    </tr>
+
+@foreach (var item in Model.Projects) {
+    <tr>
+        <td>
+           @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToHtmlString(), "Show", "Project", new { id=item.Id }, new object())<br />
+           <i><small>@item.Description</small></i>
+        </td>
+    </tr>
+}
+</table>

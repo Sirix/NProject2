@@ -1,11 +1,14 @@
 ﻿@model Dictionary<int, string>
 @{
     ViewBag.Title = "Invite";
-    Layout = "~/Views/Shared/Site.Layout.cshtml";
 }
-<script language="javascript" src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+@section JSScript
+{
+<script src="@Url.Content("~/Scripts/bootstrap.min.js")" language="javascript" type="text/javascript"></script>
+}
 <br><br>
 <h4>Invite user by email</h4>
+We will look for this user in our base or send him a direct e-mail.
 @using (Html.BeginForm()) { }
 
      <input type="text" name="emails" id="singleEmail" />

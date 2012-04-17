@@ -6,10 +6,11 @@ using NProject.Models.Domain;
 
 namespace NProject.Web.ViewModels.Task
 {
-    public class ListInProject
+    public class List : ViewModelBase
     {
         public IEnumerable<NProject.Models.Domain.Task> Tasks { get; set; }
+        public bool CanUserEditTasks { get; set; }
 
-        public string ProjectTitle { get; set; }
+        public string TaskFilter { get; set; }
     }
 }

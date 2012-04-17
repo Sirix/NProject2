@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using NProject.Models.Domain;
+using NProject.Web.ViewModels;
 
 namespace NProject.ViewModels.Generic
 {
-    public class ProjectListViewModel : SiteMasterViewModel
+    public class ProjectListViewModel : ViewModelBase
     {
         public string TableTitle { get; set; }
         public bool UserCanCreateAndDeleteProject { get; set; }

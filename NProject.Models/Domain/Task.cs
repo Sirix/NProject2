@@ -10,7 +10,8 @@ namespace NProject.Models.Domain
         Assigned = 2,
         Executing = 3,
         Completed = 4,
-        Stopped = 5
+        Stopped = 5,
+        Deleted = 6
     }
 
     public enum CostType
@@ -26,28 +27,30 @@ namespace NProject.Models.Domain
         {
             TaskComments = new HashSet<TaskComment>();
             CreationDate = DateTime.UtcNow;
+            Status = TaskStatus.Created;
         }
 
         public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
+
         public string Description { get; set; }
         public System.DateTime CreationDate { get; set; }
         public System.DateTime? BeginWorkDate { get; set; }
         public System.DateTime? EndWorkDate { get; set; }
         public int? SpentHours { get; set; }
         public int? EstimatedHours { get; set; }
-        [DisplayFormat(NullDisplayText="")]
+
+        [DisplayFormat(NullDisplayText = "")]
         public decimal? CostValue { get; set; }
 
-        [ForeignKey("Responsible")]
-        public int ResponsibleId { get; set; }
-
-        [ForeignKey("Project")]
         public int ProjectId { get; set; }
-
         public virtual Project Project { get; set; }
+
+        public int? ResponsibleId { get; set; }
         public virtual User Responsible { get; set; }
+
         public virtual ICollection<TaskComment> TaskComments { get; set; }
 
         #region Status

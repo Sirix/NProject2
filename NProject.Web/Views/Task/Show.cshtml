@@ -1,0 +1,105 @@
+﻿@using NProject.Models.Domain
+@using NProject.Web.Helpers
+@model NProject.Web.ViewModels.Task.Show
+@{
+    ViewBag.Title = "Show";
+}
+@section Breadcrumbs
+{
+    @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Show", "Project", new {id = Model.ProjectId }), Model.ProjectName },
+                                                                     {Url.Action("List", new {id=Model.ProjectId}), "Tasks"}, {"", Model.Task.Name} })
+}
+<style>
+    label
+    {
+        display: inline;
+    }
+    span.field-validation-error
+    {
+        display: block;
+        color: #B94A48;
+    }
+</style>
+<h2>@Html.DisplayTextFor(model => model.Task.Name)</h2>
+<div style="margin-left: 0" class="span7">
+    @Html.LabelFor(model => model.Task.Responsible):
+    @(Model.Task.ResponsibleId.HasValue ? Html.DisplayTextFor(model => model.Task.Responsible.Name).ToHtmlString() : "Free assignment")
+</div>
+<div style="float: left">
+    @Html.LabelFor(model => model.Task.Status):
+    @switch (Model.Task.Status)
+    {
+        case TaskStatus.Created:
+        <span class="label">@Html.DisplayTextFor(model => model.Task.Status)</span>
+        if (!Model.Task.ResponsibleId.HasValue)
+        {
+            @Html.ActionLink("Accept task", "Accept", new {id = Model.Task.Id})
+        }
+        break;
+        case TaskStatus.Assigned:
+        <span class="label label-info">@Html.DisplayTextFor(model => model.Task.Status)</span>
+        if (Model.AssignedForCurrentUser)
+        {
+            @Html.ActionLink("Start task", "Start", new {id = Model.Task.Id})
+        }
+        break;
+        case TaskStatus.Executing:
+        <span class="label" style="background-color: #3FA848">@Html.DisplayTextFor(model => model.Task.Status)</span>
+        if (Model.AssignedForCurrentUser)
+        {
+            @Html.ActionLink("Complete task", "Complete", new {id = Model.Task.Id})
+        }
+        break;
+        case TaskStatus.Completed:
+        <span class="label label-success">@Html.DisplayTextFor(model => model.Task.Status)</span>
+        break;
+        case TaskStatus.Stopped:
+        break;
+        default:
+        throw new ArgumentOutOfRangeException();
+    }
+</div>
+<div style="clear: both">
+</div>
+<br />
+<div class="well">
+    @if (string.IsNullOrEmpty(Model.Task.Description))
+    {
+        <text>No description is given</text>
+    }
+    else
+    {
+        @Html.DisplayTextFor(model => model.Task.Description)
+    }
+</div>
+<div id="commentForm">
+    @using (Html.BeginForm("PostComment", "Task", new { id = Model.Task.Id }, FormMethod.Post))
+    {
+        <fieldset>
+            <legend>Comments</legend>
+            <div class="control-group" style="margin-top: 5px">
+                <div class="controls">
+                    @Html.TextArea("message", new { @class = "span8", rows = 2, style = "margin-top:5px", data_val = "true", data_val_required = "The Message field is required." })
+                    @Html.ValidationMessage("message")
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Post" />
+        </fieldset>
+    }
+</div>
+<div id="comments">
+    @if (Model.Task.TaskComments.Any())
+    {
+        foreach (var cm in Model.Task.TaskComments)
+        {
+        <div style="border: 1px grey solid; padding: 5px; margin: 5px">
+            <strong>@cm.Author.Name</strong> at @RazorHelpers.ConvertUtcToUserTime(cm.CreationDate)<br />
+            @cm.Text
+        </div>
+        }
+    }
+    else
+    {
+        <text>No comments have been posted yet</text>
+    }
+</div>

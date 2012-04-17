@@ -9,26 +9,40 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace NProject.Models.Domain
 {
-    public partial class Meeting
+    public class Meeting
     {
         public Meeting()
         {
+            EventDate = DateTime.UtcNow.AddHours(1);
+
             this.Participants = new HashSet<User>();
             this.MeetingComments = new HashSet<MeetingComment>();
         }
-    
+
         public int Id { get; set; }
-        public string Title { get; set; }
-        public System.DateTime BeginDate { get; set; }
-        public System.DateTime EndDate { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime EventDate { get; set; }
+
+        public int ProjectId { get; set; }
+        public Project Project { get; set; }
+
         public System.Guid AccessToken { get; set; }
-    
+
+        //public int Organizer_Id { get; set; }
         public virtual User Organizer { get; set; }
         public virtual ICollection<User> Participants { get; set; }
         public virtual ICollection<MeetingComment> MeetingComments { get; set; }
     }
-    
 }

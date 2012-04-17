@@ -33,9 +33,8 @@ namespace NProject.Models.Domain
             this.OwnedWorkspaces = new HashSet<Workspace>();
             this.ManagedProjects = new HashSet<Project>();
             this.Tasks = new HashSet<Task>();
-            this.OrganizedMeetings = new HashSet<Meeting>();
+
             this.Meetings = new HashSet<Meeting>();
-            this.SentInvitations = new HashSet<Invitation>();
             this.ReceivedInvitations = new HashSet<Invitation>();
             this.Comments = new HashSet<TaskComment>();
             this.MeetingComments = new HashSet<MeetingComment>();
@@ -57,9 +56,10 @@ namespace NProject.Models.Domain
         public virtual ICollection<Workspace> OwnedWorkspaces { get; set; }
         public virtual ICollection<Project> ManagedProjects { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
-        public virtual ICollection<Meeting> OrganizedMeetings { get; set; }
+
+        //public virtual ICollection<Meeting> OrganizedMeetings { get; set; }
         public virtual ICollection<Meeting> Meetings { get; set; }
-        public virtual ICollection<Invitation> SentInvitations { get; set; }
+
         public virtual ICollection<Invitation> ReceivedInvitations { get; set; }
         public virtual ICollection<TaskComment> Comments { get; set; }
         public virtual ICollection<MeetingComment> MeetingComments { get; set; }

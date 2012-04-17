@@ -17,10 +17,7 @@ namespace NProject.Web.Controllers
         public ActionResult Index()
         {
             var data = ServiceLocator.Current.GetInstance<INProjectEntities>();
-            var messages = from i in data.Invitations.Where(i => i.Invitee.Id == SessionStorage.User.Id).ToList()
-                           select
-                               string.Format("You have been invited to project \"{0}\" by {1}", i.Project.Name,
-                                             i.Sender.Name);
+            var messages = data.Invitations.Where(i => i.Invitee.Id == SessionStorage.User.Id).ToList();
 
             return View(messages.ToList());
         }

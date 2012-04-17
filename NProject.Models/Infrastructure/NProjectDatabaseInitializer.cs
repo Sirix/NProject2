@@ -3,7 +3,7 @@ using NProject.Models.Domain;
 
 namespace NProject.Models.Infrastructure
 {
-    internal class NProjectDatabaseInitializer : DropCreateDatabaseAlways<NProjectEntities>
+    internal class NProjectDatabaseInitializer : DropCreateDatabaseIfModelChanges<NProjectEntities>
     {
         protected override void Seed(NProjectEntities context)
         {

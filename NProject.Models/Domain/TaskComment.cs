@@ -14,11 +14,17 @@ namespace NProject.Models.Domain
 {
     public partial class TaskComment
     {
+        public TaskComment()
+        {
+            CreationDate = DateTime.UtcNow;
+        }
         public int Id { get; set; }
         public string Text { get; set; }
         public System.DateTime CreationDate { get; set; }
-    
+
+        public int AuthorId { get; set; }
         public virtual User Author { get; set; }
+        //public int TaskId { get; set; }
         public virtual Task Task { get; set; }
     }
     

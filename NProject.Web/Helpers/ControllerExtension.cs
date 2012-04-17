@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace NProject.Helpers
+namespace NProject.Web.Helpers
 {
     public static class ControllerExtension
     {
@@ -14,5 +14,6 @@ namespace NProject.Helpers
         {
             controller.TempData[messageLevel + "Message"] = message;
         }
+        
     }
 }

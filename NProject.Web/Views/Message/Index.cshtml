@@ -1,4 +1,4 @@
-﻿@model List<String>
+﻿@model List<NProject.Models.Domain.Invitation>
 
 @{
     ViewBag.Title = "My Messages";
@@ -8,8 +8,15 @@
 <h2>My received invitations</h2>
 
 <table class="table table-striped">
-@foreach (string s in Model)
+@foreach (var s in Model)
 { 
-    <tr>@s</tr>
+    <tr>
+        <td>
+        You have been invited to project "@s.Project.Name"<br />
+        @Html.ActionLink("Accept", "ProcessInvite", "Project", new { id = s.Id, verb = "accept" }, new { }) | 
+        @Html.ActionLink("Decline", "ProcessInvite", "Project", new { id = s.Id, verb = "decline" }, new { }) | 
+        @Html.ActionLink("Block", "ProcessInvite", "Project", new { id = s.Id, verb = "block" }, new { })
+        </td>
+    </tr>
 }
 </table>

@@ -9,7 +9,7 @@ namespace NProject.Web.ViewModels.Project
         {
             public int UserId { get; set; }
             public string Username { get; set; }
-            public bool IsFullAccess { get; set; }
+            public AccessLevel UserLevel { get; set; }
         }
 
         public string ProjectName { get; set; }
@@ -20,5 +20,6 @@ namespace NProject.Web.ViewModels.Project
         public User ProjectManager { get; set; }
 
         public bool CanChangePM { get; set; }
+        public bool CanEditTeam { get; set; }
     }
 }

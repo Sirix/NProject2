@@ -1,22 +1,38 @@
-﻿@model NProject.Web.ViewModels.Task.Form
-           
+﻿@using NProject.Web.Helpers
+@model NProject.Web.ViewModels.Task.Form
 <style>
-span.field-validation-error
-{
-    display:block;
-    color:#B94A48;
-}
+    span.field-validation-error
+    {
+        display: block;
+        color: #B94A48;
+    }
 </style>
-    @using (Html.BeginForm()) {
-        @Html.ValidationSummary(true)
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
         
-        <fieldset>
-            <legend>New task</legend>
-    <div style="float:left">
+    <fieldset>
+        <legend>
+            @if (Model.IsCreation)
+            { <text>Create new task</text> }
+            else
+            { <text>Editing</text>}
+        </legend>
+        <div style="padding-top: 5px;border-bottom: 1px solid #EEE;">
+            <input type="submit" class="btn btn-small btn-primary" value="Save" />
+            @if (!Model.IsCreation)
+            {
+                <div class="pull-right">
+                    <a class="btn btn-danger btn-small" href="#delete_task_modal" data-toggle="modal">
+                        <i class="icon-trash"></i>Delete </a>
+                </div>
+            }
+        </div>
+        <div style="float: left">
             <div class="control-group">
                 @Html.LabelFor(model => model.Task.Name)
                 <div class="controls">
-                    @Html.TextBoxFor(model => model.Task.Name, new {@class="span8"})
+                    @Html.TextBoxFor(model => model.Task.Name, new { @class = "span9" })
                     @Html.ValidationMessageFor(model => model.Task.Name)
                 </div>
             </div>
@@ -24,11 +40,10 @@ span.field-validation-error
                 @Html.LabelFor(model => model.Task.Description)
             </div>
             <div class="editor-field">
-                @Html.TextAreaFor(model => model.Task.Description, new { @class = "span8", rows=6 })
+                @Html.TextAreaFor(model => model.Task.Description, new { @class = "span9", rows = 6 })
                 @Html.ValidationMessageFor(model => model.Task.Description)
             </div>
-    
-@*            <div class="editor-label">
+            @*            <div class="editor-label">
                 @Html.LabelFor(model => model.Task.BeginWorkDate)
             </div>
             <div class="editor-field">
@@ -44,59 +59,54 @@ span.field-validation-error
                 @Html.ValidationMessageFor(model => model.Task.EstimatedHours)
             </div>*@
             <p>
-                <input type="submit" class="btn btn-large btn-primary" value="Save" />
             </p>
-            </div>
-                    
-        <div style="margin-left: 10px;float:left">
-         <div class="editor-label">
+        </div>
+        <div style="margin-left: 20px; float: left">
+            <div class="editor-label">
                 @Html.LabelFor(model => model.Task.Responsible)
             </div>
             <div class="editor-field">
-                @Html.DropDownListFor(model=>model.Task.ResponsibleId, Model.Users)
+                @Html.DropDownListFor(model => model.Task.ResponsibleId, Model.Users)
                 @Html.ValidationMessageFor(model => model.Task.Responsible)
             </div>
-       
-       <label style="text-align:center"><a href="#" onclick="$('#financeBlock').toggle()">Finance</a></label>
-       <div id="financeBlock" class="hide">
-        <div class="editor-label">
-                @Html.LabelFor(model => model.Task.CostType)
-            </div>
-            <div class="editor-field">
-                @Html.DropDownListFor(model=>model.Task.CostType, Model.CostTypes)
-                @Html.ValidationMessageFor(model => model.Task.CostType)
-            </div>
-
-            <div class="editor-label">
-                @Html.LabelFor(model => model.Task.CostValue)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.Task.CostValue)
-                @Html.ValidationMessageFor(model => model.Task.CostValue)
+            <label style="text-align: center">
+                <a onclick="$('#financeBlock').toggle()">Finance</a></label>
+            <div id="financeBlock" @if (!Model.Task.CostValue.HasValue)
+                                   {
+                                  <text>class="hide"</text>
+                                   }>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Task.CostType)
+                </div>
+                <div class="editor-field">
+                    @Html.EnumDropDownListFor(model => model.Task.CostType, new { id = "selectCostType", onchange = "toggleValueBox()" })
+                    @Html.ValidationMessageFor(model => model.Task.CostType)
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Task.CostValue)
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.Task.CostValue, new { id = "tbValue" })
+                        @Html.ValidationMessageFor(model => model.Task.CostValue)
+                    </div>
+                </div>
             </div>
         </div>
-        
-        </div>
-        @Html.HiddenFor(model=>model.Task.ProjectId)
-        </fieldset>
+        @Html.HiddenFor(model => model.Task.ProjectId)
+        @Html.HiddenFor(model => model.Task.Id)
+    </fieldset>
 
-        <div style="clear: both"></div>
+    <div style="clear: both">
+    </div>
+}
+
+<script language="javascript" type="text/javascript">
+    var freeCostType = '@NProject.Models.Domain.CostType.Free';
+
+    function toggleValueBox() {
+        if ($('#selectCostType').val() != freeCostType)
+            $('#tbValue').removeAttr('disabled');
+        else
+            $('#tbValue').val('').attr('disabled', 'disabled');
     }
-@*    <script language="javascript" type="text/javascript">
-        $('form').submit(function () {
-            if ($(this).valid()) {
-                $(this).find('div.control-group').each(function () {
-                    if ($(this).find('span.field-validation-error').length == 0) {
-                        $(this).removeClass('error');
-                    }
-                });
-            }
-            else {
-                $(this).find('div.control-group').each(function () {
-                    if ($(this).find('span.field-validation-error').length > 0) {
-                        $(this).addClass('error');
-                    }
-                });
-            }
-        });
-    </script>*@
+    toggleValueBox();
+</script>

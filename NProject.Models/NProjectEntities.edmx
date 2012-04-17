@@ -938,7 +938,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram Name="NProjectEntities" ZoomLevel="95" DisplayType="false" ShowGrid="false" >
+      <Diagram Name="NProjectEntities" ZoomLevel="94" DisplayType="false" ShowGrid="false" >
         <EntityTypeShape EntityType="NProject.Models.Domain.User" Width="1.75" PointX="5" PointY="2.75" Height="4.6725065104166665" />
         <EntityTypeShape EntityType="NProject.Models.Domain.Workspace" Width="1.5" PointX="7.5" PointY="4.5" Height="2.172587890625" />
         <EntityTypeShape EntityType="NProject.Models.Domain.Project" Width="1.5" PointX="9.75" PointY="3.875" Height="3.3263964843749996" />
@@ -966,14 +966,14 @@
           <ConnectorPoint PointX="12.75" PointY="3.5896355478710458" />
           <ConnectorPoint PointX="12.75" PointY="3.875" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="NProject.Models.Domain.Meeting" Width="1.5" PointX="5.125" PointY="8.5" Height="2.5571907552083335" />
+        <EntityTypeShape EntityType="NProject.Models.Domain.Meeting" Width="1.5" PointX="2.375" PointY="3" Height="2.5571907552083335" />
         <AssociationConnector Association="NProject.Models.Domain.UserMeeting">
-          <ConnectorPoint PointX="5.859374" PointY="7.4225065104166665" />
-          <ConnectorPoint PointX="5.859374" PointY="8.5" />
+          <ConnectorPoint PointX="5" PointY="4.2785953776041667" />
+          <ConnectorPoint PointX="3.875" PointY="4.2785953776041667" />
         </AssociationConnector>
         <AssociationConnector Association="NProject.Models.Domain.MeetingParticipants">
-          <ConnectorPoint PointX="6.3046869999999995" PointY="8.5" />
-          <ConnectorPoint PointX="6.3046869999999995" PointY="7.4225065104166665" />
+          <ConnectorPoint PointX="3.875" PointY="3.5767976888020834" />
+          <ConnectorPoint PointX="5" PointY="3.5767976888020834" />
         </AssociationConnector>
         <EntityTypeShape EntityType="NProject.Models.Domain.Invitation" Width="1.5" PointX="9.75" PointY="0.5" Height="2.5571907552083326" IsExpanded="true" />
         <AssociationConnector Association="NProject.Models.Domain.UserInvitation">
@@ -1009,8 +1009,8 @@
           <ConnectorPoint PointX="4.5" PointY="8.1151432291666659" />
         </AssociationConnector>
         <AssociationConnector Association="NProject.Models.Domain.MeetingMeetingComment">
-          <ConnectorPoint PointX="5.125" PointY="8.8026432291666659" />
-          <ConnectorPoint PointX="4.5" PointY="8.8026432291666659" />
+          <ConnectorPoint PointX="3.4375" PointY="5.5571907552083335" />
+          <ConnectorPoint PointX="3.4375" PointY="7.125" />
         </AssociationConnector>
         <EntityTypeShape EntityType="NProject.Models.Domain.TeamMate" Width="1.5" PointX="7.5" PointY="7" Height="1.9802864583333326" />
         <AssociationConnector Association="NProject.Models.Domain.UserTeamMate">

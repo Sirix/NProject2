@@ -1,15 +1,34 @@
-﻿@model IEnumerable<NProject.Models.Domain.Task>
+﻿@model NProject.Web.ViewModels.Task.List
 
 @{
     ViewBag.Title = "List";
     Layout = "~/Views/Shared/Site.Layout.cshtml";
 }
-
+@section Breadcrumbs
+{
+    @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Show", "Project", new {id = Model.ProjectId }), Model.ProjectName },
+                                                                     {"", "Tasks"} })
+}
 <h2>List</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create", new { id = ViewData["ProjectId"] })
-</p>
+     <div class="row" style="margin-bottom: 5px;">
+     <div style="display: inline; margin-left:20px" class="controls">
+     Show: 
+     <select onchange="javascript:document.location.search = 'show='+this.value" id="taskFilter">
+        <option value="all">All tasks</option>
+        <option value="completed">Completed</option>
+        <option value="active" selected="selected">Active</option>
+     </select>
+     </div>
+     @if (Model.CanUserEditTasks)
+     {
+         <div class="pull-right">
+             <a class="btn btn-success btn-small" href="@Url.Action("Create", "Task", new {id = Model.ProjectId})">
+                 <i class="icon-plus"></i> Create new
+             </a>
+         </div>
+     }
+     </div>
+ 
 <table  class="table table-striped">
     <tr>
         <th>
@@ -24,7 +43,8 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Tasks)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
@@ -36,11 +56,16 @@
             @Html.DisplayFor(modelItem => item.Responsible.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Show", "Show", new {id = item.Id})
+            @if (Model.CanUserEditTasks)
+            {
+                @:| @Html.ActionLink("Edit", "Edit", new {id = item.Id})
+            }
         </td>
     </tr>
 }
 
 </table>
+<script type="text/javascript">
+    document.getElementById('taskFilter').value = '@Model.TaskFilter';
+</script>

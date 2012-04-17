@@ -11,29 +11,47 @@ namespace NProject.Web.Controllers
     [Authorize]
     public class TaskController : Controller
     {
-        public ActionResult List(int id)
+        public ActionResult List(int id, string show = "active")
         {
-            var ts = new TaskService();
-            var tasks = ts.GetTasksForProject(id);
-            var vm = new ListInProject { Tasks = tasks };
+            var ps = new ProjectService();
+            if (!ps.IsUserAllowedToDo(id, SessionStorage.User.Id, ProjectAction.SeeTaskList))
+                return RedirectToAction("Index", "Home");
 
-            var project = (new ProjectService()).GetProjectById(id);
-          
-            ViewData["ProjectId"] = id;
-            ViewData["ProjectTitle"] = project.Name;
-            return View(tasks.ToList());
+            var project = ps.GetProjectById(id);
+            var tasks = new TaskService().GetTasksForProject(id, show);
+            var vm = new List
+                         {
+                             TaskFilter = show,
+                             Tasks = tasks,
+                             ProjectName = project.Name,
+                             ProjectId = id,
+                             CanUserEditTasks = ps.GetProjectById(id).Team.Any(
+                                 t => t.UserId == SessionStorage.User.Id && t.AccessLevel == AccessLevel.ProjectManager)
+                         };
+
+            return View(vm);
         }
-
+        #region Create
+        
         public ActionResult Create(int id)
         {
+            var ps = new ProjectService();
+            if (!ps.IsUserAllowedToDo(id, SessionStorage.User.Id, ProjectAction.CreateOrEditTask))
+                return RedirectToAction("Index", "Home");
+
             var model = new Form
                             {
                                 CostTypes = UIHelper.CreateSelectListFromEnum<CostType>(),
                                 Statuses = UIHelper.CreateSelectListFromEnum<TaskStatus>(),
-                                Users = from u in new ProjectService().GetProjectTeam(id)
-                                        select new SelectListItem {Text = u.User.Name, Value = u.UserId.ToString()},
+                                Users = (from u in ps.GetProjectTeam(id)
+                                         select new SelectListItem {Text = u.User.Name, Value = u.UserId.ToString()}).
+                                    ToList(),
                                 Task = new Task {ProjectId = id},
+                                ProjectName = ps.GetProjectById(id).Name,
+                                ProjectId = id,
+                                IsCreation = true
                             };
+            model.Users.Add(new SelectListItem {Text = "Free assigning", Value = ""});
 
             return View(model);
         }
@@ -41,6 +59,10 @@ namespace NProject.Web.Controllers
         [HttpPost]
         public ActionResult Create(Form f)
         {
+            var ps = new ProjectService();
+            if (!ps.IsUserAllowedToDo(f.Task.ProjectId, SessionStorage.User.Id, ProjectAction.CreateOrEditTask))
+                return RedirectToAction("Index", "Home");
+
             if (!ModelState.IsValid) return View(f);
 
             var ts = new TaskService();
@@ -48,8 +70,126 @@ namespace NProject.Web.Controllers
 
             return RedirectToAction("List", new {id = f.Task.ProjectId});
         }
+        #endregion
+        #region Edit
+        
+        public ActionResult Edit(int id)
+        {
+            var ts = new TaskService();
+            var task = ts.GetTask(id);
+            if (task == null)
+                return RedirectToAction("Index", "Home");
+
+            var ps = new ProjectService();
+            if (!ps.IsUserAllowedToDo(task.ProjectId, SessionStorage.User.Id, ProjectAction.CreateOrEditTask))
+                return RedirectToAction("List", new {id = task.ProjectId});
+
+            var model = new Form
+                            {
+                                CostTypes = UIHelper.CreateSelectListFromEnum<CostType>(task.CostType),
+                                Statuses = UIHelper.CreateSelectListFromEnum<TaskStatus>(task.Status),
+                                Users = (from u in ps.GetProjectTeam(task.ProjectId)
+                                         select new SelectListItem {Text = u.User.Name, Value = u.UserId.ToString()}).
+                                    ToList(),
+                                Task = task,
+                                ProjectId = task.ProjectId,
+                                ProjectName = task.Project.Name
+                            };
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Form t)
+        {
+            var ts = new TaskService();
+            var task = ts.GetTask(t.Task.Id);
+            if (task == null)
+                return RedirectToAction("Index", "Home");
+
+            var ps = new ProjectService();
+            if (!ps.IsUserAllowedToDo(t.Task.ProjectId, SessionStorage.User.Id, ProjectAction.CreateOrEditTask))
+                return RedirectToAction("List", new { id = task.Id });
 
 
+            if (!ModelState.IsValid) return View(t);
+
+            ts.UpdateTask(t.Task);
+
+            this.SetTempMessage(Resources.Task_Updated, "success");
+            return RedirectToAction("List", new {id = t.Task.ProjectId});
+        }
+        #endregion
+        public ActionResult Show(int id)
+        {
+            var ts = new TaskService();
+            var task=ts.GetTask(id);
+            var vm = new Show
+                         {
+                             Task = task,
+                             ProjectId = task.ProjectId,
+                             ProjectName = task.Project.Name,
+                             CanUserAcceptTask = !task.ResponsibleId.HasValue,
+                             AssignedForCurrentUser = task.ResponsibleId.GetValueOrDefault() == SessionStorage.User.Id
+                         };
+
+            return View(vm);
+        }
+        public ActionResult PostComment(int id, string message)
+        {
+            var ts = new TaskService();
+            ts.PostComment(id, message, SessionStorage.User.Id);
+
+            return RedirectToAction("Show", new {id = id});
+        }
+
+        public ActionResult Start(int id)
+        {
+            var ts = new TaskService();
+            if(!ts.IsUserAllowedToDo(id, SessionStorage.User.Id, TaskAction.Start))
+                return RedirectToAction("Index", "Home");
+
+            string res = ts.StartTask(id);
+
+            return RedirectToAction("Show", new { id });
+        }
+
+        public ActionResult Complete(int id)
+        {
+            var ts = new TaskService();
+            if (!ts.IsUserAllowedToDo(id, SessionStorage.User.Id, TaskAction.Complete))
+                return RedirectToAction("Index", "Home");
+
+            ts.CompleteTask(id);
+
+            return RedirectToAction("Show", new { id });
+        }
+
+        public ActionResult Accept(int id)
+        {
+            var ts = new TaskService();
+            if (!ts.IsUserAllowedToDo(id, SessionStorage.User.Id, TaskAction.Accept))
+                return RedirectToAction("Index", "Home");
+
+            ts.AcceptTask(id, SessionStorage.User.Id);
+            return RedirectToAction("Show", new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            var ts = new TaskService();
+            if (!ts.IsUserAllowedToDo(id, SessionStorage.User.Id, TaskAction.Delete))
+                return RedirectToAction("Index", "Home");
+
+            var task = ts.GetTask(id);
+            if (task == null)
+                return RedirectToAction("Index", "Home");
+
+            ts.DeleteTask(id);
+            return RedirectToAction("List", "Task", new {id});
+        }
 
         #region OldCode-not working
         /*
@@ -374,5 +514,7 @@ namespace NProject.Web.Controllers
         }
          */
         #endregion
+
+
     }
 }

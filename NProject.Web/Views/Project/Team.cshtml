@@ -4,26 +4,57 @@
     ViewBag.Title = "Team";
     Layout = "~/Views/Shared/Site.Layout.cshtml";
 }
+@section Breadcrumbs
+{
+    @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Show", "Project", new {id = Model.ProjectId}), Model.ProjectName },
+                                                                     {"", "Team"} })
+}
+@section JSScript
+{
+<script language="javascript" type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-modal.js")"></script>
+<script language="javascript" type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-transition.js")"></script>
+}
+@section DocumentReadyJS
+{
+    $('#selectRoles option[value="@NProject.Models.Domain.AccessLevel.ProjectManager"]').remove();
+}
+<script language="javascript" type="text/javascript">
+    function startEdit(id, userName, role) {
+        $('#userName').html(userName);
+        $('#selectRoles').val(role);
+        $('#userId').val(id);
 
+        $('#user_remove_warning').hide();
+        $('#btnRemoveUser').show();
+        $('#user_edit_modal').modal('show');
+    }
+    function sendDeleteRequest(userId) {
+        
+    }
+</script>
 <h2>Team</h2>
-
-<b>Project Manager: </b> @Model.ProjectManager.Name @if(Model.CanChangePM) {<text> <a href="#">Change him</a></text>}
+@if (Model.CanEditTeam)
+{ 
 <div class="row" style="margin-bottom: 5px;">
   <div class="pull-right">
-        <a class="btn btn-success btn-small" href="@Url.Action("Invite", "Project", new {id=Model.ProjectId})">
-            <i class="icon-plus"></i> Add
+        <a class="btn btn-success btn-small" href="@Url.Action("Invite", "Project", new { id = Model.ProjectId })">
+            <i class="icon-plus"></i> Invite
         </a>
   </div>
 </div>
+}
 <table class="table table-striped">
     <tr>
         <th>
             Name
         </th>
         <th>
-            Mode
+            Status
         </th>
-        <th></th>
+        @if (Model.CanEditTeam)
+        {
+            <th></th>
+        }
     </tr>
 
 @foreach (var item in Model.Team)
@@ -33,12 +64,45 @@
             @Html.DisplayFor(modelItem => item.Username)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.UserLevel)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "EditTeamMate", new {id = Model.ProjectId, userId = item.UserId}) | 
-            @Html.ActionLink("Remove", "RemoveStaff", new {id = Model.ProjectId, userId = item.UserId})
-        </td>
+        @if (Model.CanEditTeam)
+        {
+            <td>
+            @if (item.UserLevel != NProject.Models.Domain.AccessLevel.ProjectManager)
+            { 
+                <a href="javascript:startEdit(@item.UserId, '@item.Username', '@item.UserLevel')">Edit</a>
+            }
+            </td>
+        }
     </tr>
 }
-
 </table>
+@using (Html.BeginForm("TeamMate", "Project", FormMethod.Post, new { id = "userForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="UserId" id="userId" />
+    <input type="hidden" name="ProjectId" value="@Model.ProjectId" />
+    <input type="hidden" name="action" id="action" value="update" />
+    
+    <div id="user_edit_modal" class="modal hide fade in">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3 id="userName"></h3>
+        </div>
+        <div class="modal-body">        
+
+            <p>Role:  @(Html.EnumDropDownList<NProject.Models.Domain.AccessLevel>("AccessLevel", new { id = "selectRoles" }))  </p>
+            <input type="button" class="btn btn-danger large" value="Remove user" onclick="javascript:$('#user_remove_warning').toggle();$(this).toggle();" id="btnRemoveUser" />
+            <div id="user_remove_warning" class="hide">
+                <p>Are you sure about removing this user?</p>
+                <p>If you click <b>"Yes"</b> all his current tasks will lost responsible user and became "Unassigned"</p>
+                <input type="button" class="btn large" value="No, it's a mistake!" onclick="javascript:$('#user_remove_warning').toggle();$('#btnRemoveUser').toggle();" />
+                <input type="button" class="btn btn-danger large" value="Yes, remove user" onclick="$('#action').val('remove'); $('#userForm').submit();" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Save changes" />
+        </div>
+    </div>
+}

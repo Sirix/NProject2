@@ -17,6 +17,7 @@ namespace NProject.Models.Domain
         {
             InvitationDate = DateTime.UtcNow;
             Status = InvitationStatus.Sent;
+            AccessLevel = AccessLevel.Full;
         }
 
         public int Id { get; set; }
@@ -26,17 +27,17 @@ namespace NProject.Models.Domain
         public DateTime? LastSentDate { get; set; }
 
         //[ForeignKey("Sender")]
-        //public int SenderId { get; set; }
+     //   public int SenderId { get; set; }
 
         public virtual User Sender { get; set; }
 
-     //   [ForeignKey("Invitee")]
-       // public int InviteeId { get; set; }
+        //   [ForeignKey("Invitee")]
+        //public int? InviteeId { get; set; }
 
         public virtual User Invitee { get; set; }
 
-       // [ForeignKey("Project")]
-        //public int ProjectId { get; set; }
+        // [ForeignKey("Project")]
+        public int ProjectId { get; set; }
 
         public virtual Project Project { get; set; }
 
@@ -48,6 +49,16 @@ namespace NProject.Models.Domain
         {
             get { return (InvitationStatus) StatusValue; }
             set { StatusValue = (byte) value; }
+        }
+
+        [Column("AccessLevel")]
+        public byte AccessLevelValue { get; set; }
+
+        [NotMapped]
+        public AccessLevel AccessLevel
+        {
+            get { return (AccessLevel)AccessLevelValue; }
+            set { AccessLevelValue = (byte)value; }
         }
     }
 }

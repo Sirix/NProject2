@@ -1,6 +1,9 @@
 ﻿using System.Web.Mvc;
+using NProject.BLL;
+using NProject.Web.Helpers;
+using NProject.Web.ViewModels.Home;
 
-namespace NProject.Controllers
+namespace NProject.Web.Controllers
 {
     [HandleError]
     public class HomeController : Controller
@@ -19,6 +22,21 @@ namespace NProject.Controllers
         public ActionResult About()
         {
             return View();
+        }
+
+        public ActionResult Settings()
+        {
+            var model = new Settings() {HoursOffset = SessionStorage.User.HoursOffsetFromUtc};
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Settings(Settings model)
+        {
+            new UserService().SaveSettings(SessionStorage.User.Id, model.HoursOffset, model.Locale);
+            SessionStorage.User.HoursOffsetFromUtc = model.HoursOffset;
+
+            return RedirectToAction("Settings");
         }
     }
 }

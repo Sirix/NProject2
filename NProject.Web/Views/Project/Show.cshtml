@@ -3,12 +3,9 @@
 @{
     ViewBag.Title = string.Format("Project \"{0}\"", Model.Name);
 }
-@section Breadcrumbs
-{
-    @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Index", "Workspace"), "My Workspaces" },
-                                                                     {Url.Action("Show", "Workspace", new {id=Model.Workspace.Id}),
-    Model.Workspace.Name}, {"", Model.Name} })
-}
+@RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Index", "Workspace"), "My Workspaces" },
+                                                                                                     {Url.Action("Show", "Workspace", new {id=Model.Workspace.Id}),
+                                                                                                         Model.Workspace.Name}, {"", Model.Name} })
 
 <h2>@Model.Name</h2>
 <div class="row" style="margin-bottom: 5px;">
@@ -22,8 +19,10 @@
     <li><a href="@Url.Action("Team", "Project", new {id=Model.Id})">Team</a></li>
 </ul>
 
+    <a class="btn btn-small" href="@Url.Action("Create", "Meeting", new {id=Model.Id})">Request a meeting</a>
+
 <fieldset>
-    <legend>Project</legend>
+    <legend>General information</legend>
 
     <div class="display-label">Name</div>
     <div class="display-field">

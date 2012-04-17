@@ -6,7 +6,7 @@
     {
         <ul class="nav">
         <li @if (ViewBag.ActiveMenu == "workspaces") {  @("class=active")}><a href="@Url.Action("Index", "Workspace")">My Workspaces</a></li>
-            <li><a href="#">Shared projects</a></li>
+            <li><a href="@Url.Action("Shared", "Project")">Shared projects</a></li>
             <li><a href="@Url.Action("Index", "Message")">My messages</a></li>
         </ul>
         <div class="pull-right">
@@ -46,15 +46,35 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")"/>
-    <script language="javascript" type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript" language="javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript" language="javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript" language="javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.globalize.js")" type="text/javascript" language="javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.globalize.culture.ru-RU.js")" type="text/javascript" language="javascript"></script>
+    @RenderSection("JSScript", false)
+
     <style type="text/css">
       body {
         padding-top: 40px;
         padding-bottom:40px;
       }
     </style>
+
+    <script type="text/javascript">
+        $.validator.methods.number = function(value, element) {
+            return !isNaN(Globalize.parseFloat(value));
+        };
+        $(document).ready(function () {
+            Globalize.culture('ru-RU');
+            
+            
+            
+            @RenderSection("DocumentReadyJS", false)
+            
+          //  $.culture = Globalize.cultures["ru-RU"];
+            //$.preferCulture($.culture.name);
+        });
+</script>
 
    @* <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -74,6 +94,8 @@
       </div>
     </div>
     <div class="container">
+    @RenderSection("Breadcrumbs", false)
+
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-error">
@@ -86,7 +108,7 @@
             <p>@TempData["SuccessMessage"]</p>
         </div>
     }
-    @RenderSection("Breadcrumbs", false)
+    
     @RenderBody()
       <!-- Example row of columns -->
 @*      <div class="row">

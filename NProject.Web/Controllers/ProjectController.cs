@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading;
 using System.Web.Mvc;
 using NProject.BLL;
+using NProject.Models.Domain;
 using NProject.Web.Helpers;
 using NProject.Web.ViewModels.Project;
 
@@ -56,16 +58,43 @@ namespace NProject.Web.Controllers
 
             var vm = new TeamList
                          {
-                             ProjectManager = project.ProjectManager,
                              ProjectId = id,
                              ProjectName = project.Name,
                              Team = from t in project.Team
                                     select
-                                        new TeamList.TeamMate {UserId = t.UserId, Username = t.User.Name},
-                             CanChangePM = project.Workspace.Owner.Id == SessionStorage.User.Id
+                                        new TeamList.TeamMate
+                                            {UserId = t.UserId, Username = t.User.Name, UserLevel = t.AccessLevel},
+                             CanChangePM = project.Workspace.Owner.Id == SessionStorage.User.Id,
+                             CanEditTeam =
+                                 project.Team.Any(
+                                     t =>
+                                     t.AccessLevel == Models.Domain.AccessLevel.ProjectManager &&
+                                     t.UserId == SessionStorage.User.Id)
                          };
 
             return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult TeamMate(TeamMate tm, string action)
+        {
+            var ps = new ProjectService();
+            if (!ps.IsUserAllowedToDo(tm.ProjectId, SessionStorage.User.Id, ProjectAction.EditTeam))
+                return RedirectToAction("Index", "Home");
+
+            if (action == "update")
+            {
+                ps.UpdateTeamMate(tm);
+                this.SetTempMessage(Resources.Global_ChangesSaved, "success");
+            }
+            if (action == "remove")
+            {
+                ps.RemoveTeamMate(tm);
+                this.SetTempMessage(Resources.Project_Team_UserRemoved, "success");
+            }
+
+            return RedirectToAction("Team", new {id = tm.ProjectId});
         }
 
         public ActionResult Invite(int id)
@@ -73,9 +102,7 @@ namespace NProject.Web.Controllers
             var ps = new ProjectService();
             var usersInfo = ps.GetUsersForInviteToProject(id);
 
-            usersInfo.Add(41, "Mark");
-            usersInfo.Add(54, "Alex");
-            
+
             ViewBag.Id = id;
             return View(usersInfo);
         }
@@ -83,10 +110,18 @@ namespace NProject.Web.Controllers
         [HttpPost]
         public ActionResult Invite(int id, string email = "", int[] userIds = null)
         {
-            Thread.Sleep(1000);
+            var us = new UserService();
             if (email != "")
             {
-                var us = new UserService();
+                //test send email
+                SmtpClient client = new SmtpClient();
+                var mm = new MailMessage("nproject.service@google.com", email);
+                mm.Subject = "NProject invitation";
+                mm.Body = "You have been invited to join NProject";
+                mm.IsBodyHtml = true;
+                client.Send(mm);
+
+
                 int uid = us.GetUserIdByEmail(email);
                 if (uid == -1)
                 {
@@ -98,12 +133,63 @@ namespace NProject.Web.Controllers
                     return new ContentResult {Content = "Message sent!"};
                 }
             }
-                
+
             if (userIds != null)
             {
-                return new ContentResult {Content = "count: " + userIds.Length};
+                foreach (var userId in userIds)
+                {
+                    if (userId != SessionStorage.User.Id)
+                        us.SendInvite(userId, SessionStorage.User.Id, id);
+                }
+                return new ContentResult {Content = "Invitations sent!"};
             }
             return new ContentResult();
+        }
+
+        public ActionResult ProcessInvite(int id, string verb)
+        {
+            string result;
+            var us = new UserService();
+            var invitation = us.GetInvitation(id);
+            if (invitation == null) return RedirectToAction("Index", "Home");
+
+            //invitation sent to already resgistered user
+            if (invitation.Invitee != null)
+            {
+                //current logged user is target user
+                if (invitation.Invitee.Id == SessionStorage.User.Id)
+                    result = us.ProcessInvitation(invitation, verb, SessionStorage.User.Id);
+                    //non-authorized
+                else
+                    return RedirectToAction("Index", "Home");
+            }
+            //we look for email in database
+            else
+            {
+                var userId = us.GetUserIdByEmail(invitation.InviteeEmail);
+                if (userId == -1)
+                {
+                    if (verb == "block")
+                        result = us.ProcessInvitation(invitation, "block", 0);
+                    else
+                    {
+                        TempData["InformationMessage"] = "You should register before processing";
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                    result = us.ProcessInvitation(invitation, verb, userId);
+            }
+            TempData["InformationMessage"] = result;
+            return RedirectToAction("Shared", "Project");
+        }
+
+
+        public ActionResult Shared()
+        {
+            var projects=new ProjectService().GetSharedProjectsForUser(SessionStorage.User.Id);
+
+            return View(new Shared {Projects = projects});
         }
 
         #region Old code-not working

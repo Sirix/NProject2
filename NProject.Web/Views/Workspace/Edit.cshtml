@@ -21,13 +21,13 @@
         <p>All projects inside this workspace will be deleted.. </p>
     </div>
     <div class="modal-footer">
-    @using (Html.BeginForm("Delete", "Workspace", FormMethod.Post))
-    {
-        @Html.Hidden("id", Model.Id)
-        @Html.AntiForgeryToken()
-        <input type="submit" class="btn btn-danger large" value="Yes, DELETE it" />
-        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-    }              
+        @using (Html.BeginForm("Delete", "Workspace", FormMethod.Post))
+        {
+            @Html.Hidden("id", Model.Id)
+            @Html.AntiForgeryToken()
+            <input type="submit" class="btn btn-danger large" value="Yes, DELETE it" />
+            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        }              
     </div>
 </div>
 <input class="btn btn-danger large" onclick="$('#ws_del_confirm').modal('show');"  value="Delete" type="button">

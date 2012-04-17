@@ -30,9 +30,13 @@ namespace NProject.Models.Domain
         public DateTime CreationDate { get; set; }
         public DateTime? EndDate { get; set; }
         public decimal? Budget { get; set; }
-    
+
+        public int WorkspaceId { get; set; }
         public virtual Workspace Workspace { get; set; }
-        public virtual User ProjectManager { get; set; }
+
+////        public int ProjectManagerId { get; set; }
+//        public virtual User ProjectManager { get; set; }
+
         public virtual ICollection<Task> Tasks { get; set; }
         public virtual ICollection<Invitation> Invitations { get; set; }
         public virtual ICollection<TeamMate> Team { get; set; }

@@ -11,7 +11,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using Microsoft.Practices.Unity;
-using NProject.Helpers;
 using NProject.BLL;
 using NProject.Models;
 using NProject.Models.Domain;

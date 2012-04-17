@@ -32,7 +32,14 @@ namespace NProject.Models.Domain
             : base("name=NProjectEntities")
         {
         }
-    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Meeting>().HasMany<User>(m => m.Participants).WithMany().Map(
+                t => t.MapLeftKey("UserId").MapRightKey("MeetingId").ToTable("MeetingParticipants"));
+
+            modelBuilder.Entity<User>().HasMany<Invitation>(u => u.ReceivedInvitations).WithRequired(i => i.Invitee);
+        }
+
         public IDbSet<User> Users { get; set; }
         public IDbSet<Workspace> Workspaces { get; set; }
         public IDbSet<Project> Projects { get; set; }

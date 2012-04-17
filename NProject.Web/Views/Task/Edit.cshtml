@@ -1,0 +1,40 @@
+﻿@model NProject.Web.ViewModels.Task.Form
+@{
+    ViewBag.Title = "Editing";
+}
+@section Breadcrumbs
+{
+    @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Show", "Project", new {id = Model.ProjectId }), Model.ProjectName },
+    {Url.Action("List", new {id=Model.ProjectId}), "Tasks"}, {"", Model.Task.Name} })
+}
+@section JSScript
+{
+    <script language="javascript" type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-modal.js")"></script>
+    <script language="javascript" type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-transition.js")"></script>
+}
+@{Html.RenderPartial("_form", Model);}
+<div id="delete_task_modal" class="modal hide fade">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3 id="taskName">@Model.Task.Name</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            You are about to delete this task.</p>
+        @if (Model.Task.CostType == NProject.Models.Domain.CostType.PerTime)
+        {
+            <p>
+                <strong>Note:</strong> all spent time on this task will be calculated to a programmer anyway.</p>
+        }
+        <p>
+            Would you like to continue?</p>
+    </div>
+    <div class="modal-footer">
+        @using (Html.BeginForm("Delete", "Task", new { id = Model.Task.Id }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" class="btn btn-danger" value="Delete" />
+            <input type="button" class="btn" value="No" data-dismiss="modal" />
+        }
+    </div>
+</div>

@@ -2,18 +2,9 @@
 @{
     ViewBag.Title = "Create new task";
 }
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Create</title>
-</head>
-<body>
-    
+@section Breadcrumbs
+{
+    @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Show", "Project", new {id = Model.ProjectId }), Model.ProjectName },
+                                                                     {Url.Action("List", new {id=Model.ProjectId}), "Tasks"}, {"", "New"} })
+}
 @{Html.RenderPartial("_form", Model);}
-    
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
-</body>
-</html>

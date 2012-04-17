@@ -1,0 +1,201 @@
+﻿@model NProject.Web.ViewModels.Meeting.Create
+@{
+    ViewBag.Title = "Create";
+}
+@section JSScript
+{
+    <script src="@Url.Content("~/Scripts/bootstrap-typeahead.js")" type="text/javascript" language="javascript"></script>
+    <script src="@Url.Content("~/Scripts/bootstrap-datepicker.js")" type="text/javascript" language="javascript"></script>
+}
+@section DocumentReadyJS
+{
+$.validator.methods.date = function(value, element) { return Globalize.parseDate(value);
+};
+$('#tbDatePicker').val(Globalize.format('@Model.Meeting.EventDate.ToShortDateString()', 'd')).datepicker({monthNames:Globalize.culture().calendar.months.names,shortDayNames:
+Globalize.culture().calendar.days.namesShort});
+
+$('#meetingTime').val(Globalize.format('@Model.Meeting.EventDate.ToShortTimeString()', 't'));
+}
+<h2>
+    New meeting</h2>
+<div class="alert alert-info">
+    Meeting is a way to get user feedback, discuss some topics or order your development process.
+</div>
+<style>
+    span.field-validation-error
+    {
+        display: block;
+        color: #B94A48;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(m => m.Meeting.ProjectId)
+    <fieldset>
+        <legend></legend>
+        <div style="padding-top: 5px; border-bottom: 1px solid #EEE;">
+            <input type="submit" class="btn btn-small btn-primary" value="Save" />
+            @*            <div class="pull-right">
+                <a class="btn btn-danger btn-small" href="#delete_task_modal" data-toggle="modal"><i
+                    class="icon-trash"></i>Delete </a>
+            </div>*@
+        </div>
+        <div style="float: left">
+            <div class="control-group">
+                @Html.LabelFor(model => model.Meeting.Name)
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.Meeting.Name, new { @class = "span9" })
+                    @Html.ValidationMessageFor(model => model.Meeting.Name)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Meeting.EventDate, new { style = "float: left;padding: 5px 5px 0 0" })
+                <div class="controls" style="float: left">
+                    @Html.TextBoxFor(model => model.Meeting.EventDate, new { data_val_date = "Wrong format!", id = "tbDatePicker", @class = "span2", data_val_eventLaterNow="It can be today or on next days." })
+                    @Html.ValidationMessageFor(model => model.Meeting.EventDate)
+                </div>
+            </div>
+            <div class="control-group" style="float: left; margin-left: 10px">
+                <label for="" style="float: left; padding: 5px 5px 0 0">Time</label>
+                <div class="controls" style="float: left">
+                    <input type="text" class="span1" id="meetingTime" name="meetingTime" data-val-eventLaterNow="You can't create it in the past" data-val="true" data-val-date="Time record" />
+                    <span class="field-validation-error" data-valmsg-for="meetingTime" data-valmsg-replace="true">
+                    </span>
+                </div>
+            </div>
+            <div class="control-group" style="clear: both">
+                @Html.LabelFor(model => model.Meeting.Description)
+            
+            <div class="controls">
+                @Html.TextAreaFor(model => model.Meeting.Description, new { @class = "span9", rows = 6 })
+                @Html.ValidationMessageFor(model => model.Meeting.Description)
+            </div>
+            </div>
+        </div>
+        <div style="margin-left: 20px; float: left">
+            <div class="control-group">
+                @Html.LabelFor(model => model.Meeting.Participants)
+                <div class="controls">
+                    <input type="text" class="span3" data-provide="typeahead" name="tbUserList" id="tbUserList"
+                        placeholder="Type user names or emails..." data-val="true" data-val-checkparticipants="Add at least one participant"
+                        data-items="4" data-source="@Model.TeamDataSource">
+                    <span class="field-validation-error" data-valmsg-for="tbUserList" data-valmsg-replace="true">
+                    </span>
+                </div>
+            </div>
+            <div style="margin-top: 10px" id="selectedUsers" />
+        </div>
+        @Html.HiddenFor(model => model.TeamParticipants, new { id = "teamParticipants" })
+        @Html.HiddenFor(model => model.OtherParticipants, new { id = "otherParticipants" })
+    </fieldset>
+}
+<script language="javascript" type="text/javascript">
+    $("#tbUserList").on('selected.typeahead enterPressed.typeahead', function(event, value) {
+        if (team[value] !== undefined) {
+            if (!team[value].selected) {
+                team[value].selected = true;
+                appendAndClear(value);
+            }
+        }
+        else {
+            if (additionalPeople[value] === undefined) {
+                additionalPeople[value] = 1;
+                appendAndClear(value);
+            }
+        }
+    });
+
+    function appendAndClear(value) {
+        $('#selectedUsers').append('<div class="alert alert-success" style="margin-bottom: 5px">' +
+            '<a class="close" onclick="deleteParticipant(this)">×</a>' + value + '</div>');
+        $('#tbUserList').focus().val(''); //clear selected value 
+        participantsCount++;
+        $('#tbUserList').parent().parent().removeClass('error');
+    }
+    
+    function deleteParticipant(sender) {
+        var value = $(sender).parent().text().substring(1, 100);
+        
+        if (team[value] !== undefined)
+            team[value] = false;
+        else
+            delete additionalPeople[value];
+
+        participantsCount--;
+        
+        $(sender).parent().remove(); //remove box in UI
+    }
+
+    var team = new Object();
+    @foreach (var user in Model.Team)
+    {
+        @:team['@user.User.Name'] = {id:@user.UserId, selected: false};
+    }
+    var additionalPeople = new Object();
+    var participantsCount = 0;
+    //prevent page submit by enter pressing
+    $('#tbUserList').on('keydown keypress keyup', function(e) {
+        if(e.keyCode == 13) {
+            e.preventDefault();
+        }
+    });
+    $(window).keypress(function(e) {
+        if (e.keyCode == 13) e.preventDefault();
+    });
+    //we have to set some fields manually
+    $('form').submit(function(e) {
+        $(this).validate();
+        if (!$(this).valid()) return false;
+
+        //update date
+        var date = Globalize.parseDate($('#tbDatePicker').val());
+        var time = Globalize.parseDate($('#meetingTime').val());
+        date.setHours(time.getHours());
+        date.setMinutes(time.getMinutes());
+        $('#tbDatePicker').val(date);
+
+        //create list of team
+        var teamString = '';
+        for(var user in team) {
+            if (team[user].selected)
+                teamString += team[user].id + ' ';
+        }
+        $('#teamParticipants').val(teamString);
+        
+        //create list of team
+        var otherPartString = '';
+        for(var user in additionalPeople)
+                otherPartString += user + ' ';
+        $('#otherParticipants').val(otherPartString);
+    });
+        $.validator.addMethod('checkParticipants', function(value, element) {
+            // 'value' is the value of the control being validated.
+            return participantsCount > 0; // Return true or false depending on if it passes or fails validation, respectively.
+        }, 'Html not allowed');
+     $.validator.unobtrusive.adapters.addBool('checkParticipants');
+     
+     $.validator.addMethod('eventLaterNow', function(value, element) {
+         var currentDate = new Date();
+         var date = Globalize.parseDate($('#tbDatePicker').val());
+         if(element.name == 'meetingTime')
+         {
+             //if we check date + time, we should have date only bigger than current
+             var time = Globalize.parseDate($('#meetingTime').val());
+             date.setHours(time.getHours());
+             date.setMinutes(time.getMinutes());
+
+             return date > currentDate;
+         }
+         else
+         {
+             //we check just date, so it can be today
+             currentDate.setHours(0);
+             currentDate.setMinutes(0);
+             currentDate.setSeconds(0);
+             currentDate.setMilliseconds(0);
+             
+             return date >= currentDate;
+         }
+     }, 'asd');     $.validator.unobtrusive.adapters.addBool('eventLaterNow');
+</script>
