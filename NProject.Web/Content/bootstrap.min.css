@@ -624,3 +624,9 @@ a.thumbnail:hover{border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105,
 .datepicker .overlap{color:#bfbfbf;}
 .datepicker .today{background-color:#fee9cc;}	
 .datepicker .selected{background-color:#bfbfbf;color:#ffffff;}
+span.field-validation-error{display: block;color: #B94A48;}
+.buttons-row{border-bottom: 1px solid #EEE;margin:-10px 0 10px 0;}
+legend + div.buttons-row{padding-top:10px}
+div.page-header + div.buttons-row{padding-bottom:10px}
+.buttons-row form{margin-bottom:0px;}
+.buttons-row a{}

@@ -156,6 +156,7 @@ namespace NProject.BLL
 
                 case ProjectAction.CreateOrEditTask:
                 case ProjectAction.EditTeam:
+                case ProjectAction.ViewReport:
                     return project.Team.Any(t => t.UserId == userId && t.AccessLevel == AccessLevel.ProjectManager);
             }
             return false;
@@ -172,43 +173,106 @@ namespace NProject.BLL
 
         public void AddMeeting(Meeting meeting, string userParticipants, string otherParticipants)
         {
-            var users =
-                userParticipants.Trim().Split(' ').Select(int.Parse).Select(
-                    id => Database.Users.FirstOrDefault(u => u.Id == id));
-            
-            var emails = otherParticipants.Trim().Split(' ').ToList();
             var ms = new MessageService();
-            users.ToList().ForEach((user) => { meeting.Participants.Add(user);
-                                                 ms.SendMeetingInvitation(user.Email, meeting);
-            });
-
-            foreach (var email in emails)
+            if (!String.IsNullOrEmpty(userParticipants))
             {
-                var trygetUser = Database.Users.FirstOrDefault(u => u.Email == email);
-                if (trygetUser == null)
+                var users =
+                    userParticipants.Trim().Split(' ').Select(int.Parse).Select(
+                        id => Database.Users.FirstOrDefault(u => u.Id == id));
+                users.ToList().ForEach((user) =>
+                                           {
+                                               meeting.Participants.Add(user);
+                                               ms.SendMeetingInvitation(user.Email, meeting);
+                                           });
+            }
+            if (!string.IsNullOrEmpty(otherParticipants))
+            {
+                var emails = otherParticipants.Trim().Split(' ').ToList();
+                foreach (var email in emails)
                 {
-                    trygetUser = new User
-                                     {
-                                         Email = email,
-                                         AccountType = UserAccountType.MeetingParticipant,
-                                         PasswordHash = MD5.EncryptMD5(email)
-                                     };
-                    Database.Users.Add(trygetUser);
-                    ms.SendMeetingInvitation(trygetUser.Email, meeting, false);
+                    var trygetUser = Database.Users.FirstOrDefault(u => u.Email == email);
+                    if (trygetUser == null)
+                    {
+                        trygetUser = new User
+                                         {
+                                             Email = email,
+                                             AccountType = UserAccountType.MeetingParticipant,
+                                             PasswordHash = MD5.EncryptMD5(email)
+                                         };
+                        Database.Users.Add(trygetUser);
+                        ms.SendMeetingInvitation(trygetUser.Email, meeting, false);
+                    }
+                    else
+                        ms.SendMeetingInvitation(trygetUser.Email, meeting);
+
+                    meeting.Participants.Add(trygetUser);
                 }
-                else
-                    ms.SendMeetingInvitation(trygetUser.Email, meeting);
-                
-                meeting.Participants.Add(trygetUser);
             }
             Database.Meetings.Add(meeting);
             Database.SaveChanges();
+        }
+
+        public IEnumerable<Meeting> GetMeetings(int id, string filter)
+        {
+            var meetings = Database.Meetings.AsQueryable();
+            switch (filter)
+            {
+                case "past":
+                    meetings = meetings.Where(m => m.EventDate <= DateTime.UtcNow);
+                    break;
+                case "future":
+                    meetings = meetings.Where(m => m.EventDate > DateTime.UtcNow);
+                    break;
+            }
+            return meetings;
+        }
+
+        public Meeting GetMeeting(int id)
+        {
+            //Database.ObjectContext.Detach()
+            return Database.Meetings.FirstOrDefault(m => m.Id == id);
+        }
+
+        public void UpdateMeeting(Meeting meeting, string teamPrticipants, string otherParticipants)
+        {
+            var met = Database.Meetings.FirstOrDefault(m => m.Id == meeting.Id);
+            Database.ObjectContext.ApplyCurrentValues("Meetings", meeting);
+            Database.SaveChanges();
+            //var users =
+            //   teamPrticipants.Trim().Split(' ').Select(int.Parse).Select(
+            //       id => Database.Users.FirstOrDefault(u => u.Id == id));
+
+            //var emails = otherParticipants.Trim().Split(' ').ToList();
+
+        }
+        public void PostComment(int meetingId, string message, int authorId)
+        {
+            Database.MeetingComments.Add(new MeetingComment { AuthorId = authorId, Text = message, MeetingId = meetingId });
+            Database.SaveChanges();
+        }
+
+        public Meeting FinishMeeting(int id)
+        {
+            var meeting = Database.Meetings.FirstOrDefault(m => m.Id == id);
+            meeting.Finished = true;
+            Database.SaveChanges();
+            return meeting;
+        }
+
+        public IEnumerable<Task> GetCompletedTasksInRange(DateTime beginDate, DateTime endDate)
+        {
+            return
+                Database.Tasks.Where(
+                    t =>
+                    t.StatusValue == (int) TaskStatus.Completed && t.EndWorkDate >= beginDate &&
+                    t.EndWorkDate <= endDate);
         }
     }
     public enum ProjectAction
     {
         SeeTaskList,
         CreateOrEditTask,
-        EditTeam
+        EditTeam,
+        ViewReport
     }
 }

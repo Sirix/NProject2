@@ -4,7 +4,7 @@ using NProject.Models.Domain;
 
 namespace NProject.Web.ViewModels.Meeting
 {
-    public class Create : ViewModelBase
+    public class Form : ViewModelBase
     {
         public NProject.Models.Domain.Meeting Meeting { get; set; }
         public IEnumerable<TeamMate> Team { get; set; }

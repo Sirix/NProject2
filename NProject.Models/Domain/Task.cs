@@ -86,6 +86,25 @@ namespace NProject.Models.Domain
         }
 
         #endregion
+
+        [NotMapped]
+        public decimal Cost
+        {
+            get
+            {
+                switch (CostType)
+                {
+                    case Domain.CostType.Free:
+                        return 0;
+                    case Domain.CostType.Fixed:
+                        return CostValue.Value;
+                    case Domain.CostType.PerTime:
+                        return CostValue.Value*(EndWorkDate.Value.Hour - BeginWorkDate.Value.Hour);
+                    default:
+                        return 0;
+                }
+            }
+        }
     }
 
 }

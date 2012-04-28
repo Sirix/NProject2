@@ -1,19 +1,9 @@
-﻿@model NProject.Models.Domain.Workspace
+﻿@model NProject.Web.ViewModels.Workspace.Form
 
 @{
     ViewBag.Title = "Create";
+    ViewBag.FormLegend = Resources.Workspace_NewWS;
     Layout = "~/Views/Shared/Site.Layout.cshtml";
 }
 
-<h2>Create</h2>
-
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-
 @{Html.RenderPartial("_form", Model);}
-
-Workspace is a place for grouping your projects
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

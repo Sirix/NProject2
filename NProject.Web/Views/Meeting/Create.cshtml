@@ -1,4 +1,4 @@
-﻿@model NProject.Web.ViewModels.Meeting.Create
+﻿@model NProject.Web.ViewModels.Meeting.Form
 @{
     ViewBag.Title = "Create";
 }
@@ -9,29 +9,26 @@
 }
 @section DocumentReadyJS
 {
-$.validator.methods.date = function(value, element) { return Globalize.parseDate(value);
-};
+$.validator.methods.date = function(value, element) { return Globalize.parseDate(value); };
 $('#tbDatePicker').val(Globalize.format('@Model.Meeting.EventDate.ToShortDateString()', 'd')).datepicker({monthNames:Globalize.culture().calendar.months.names,shortDayNames:
 Globalize.culture().calendar.days.namesShort});
 
 $('#meetingTime').val(Globalize.format('@Model.Meeting.EventDate.ToShortTimeString()', 't'));
+parseMeetingParticipants();
 }
 <h2>
     New meeting</h2>
 <div class="alert alert-info">
     Meeting is a way to get user feedback, discuss some topics or order your development process.
 </div>
-<style>
-    span.field-validation-error
-    {
-        display: block;
-        color: #B94A48;
-    }
-</style>
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
     @Html.HiddenFor(m => m.Meeting.ProjectId)
+    @Html.HiddenFor(model => model.Meeting.OrganizerId)
+    @Html.HiddenFor(model => model.TeamParticipants, new { id = "teamParticipants" })
+    @Html.HiddenFor(model => model.OtherParticipants, new { id = "otherParticipants" })
+    @Html.HiddenFor(model => model.Meeting.Id)
     <fieldset>
         <legend></legend>
         <div style="padding-top: 5px; border-bottom: 1px solid #EEE;">
@@ -52,7 +49,7 @@ $('#meetingTime').val(Globalize.format('@Model.Meeting.EventDate.ToShortTimeStri
             <div class="control-group">
                 @Html.LabelFor(model => model.Meeting.EventDate, new { style = "float: left;padding: 5px 5px 0 0" })
                 <div class="controls" style="float: left">
-                    @Html.TextBoxFor(model => model.Meeting.EventDate, new { data_val_date = "Wrong format!", id = "tbDatePicker", @class = "span2", data_val_eventLaterNow="It can be today or on next days." })
+                    @Html.TextBoxFor(model => model.Meeting.EventDate, new { data_val_date = "Wrong format!", id = "tbDatePicker", @class = "span2", data_val_eventLaterNow = "It can be today or on next days." })
                     @Html.ValidationMessageFor(model => model.Meeting.EventDate)
                 </div>
             </div>
@@ -86,8 +83,6 @@ $('#meetingTime').val(Globalize.format('@Model.Meeting.EventDate.ToShortTimeStri
             </div>
             <div style="margin-top: 10px" id="selectedUsers" />
         </div>
-        @Html.HiddenFor(model => model.TeamParticipants, new { id = "teamParticipants" })
-        @Html.HiddenFor(model => model.OtherParticipants, new { id = "otherParticipants" })
     </fieldset>
 }
 <script language="javascript" type="text/javascript">
@@ -115,8 +110,13 @@ $('#meetingTime').val(Globalize.format('@Model.Meeting.EventDate.ToShortTimeStri
     }
     
     function deleteParticipant(sender) {
+        var loggedUser = '@SessionStorage.User.UserName';
         var value = $(sender).parent().text().substring(1, 100);
         
+        if(loggedUser == value) {
+            alert("You can't remove yourself from a meeting");
+            return;
+        }
         if (team[value] !== undefined)
             team[value] = false;
         else
@@ -130,7 +130,15 @@ $('#meetingTime').val(Globalize.format('@Model.Meeting.EventDate.ToShortTimeStri
     var team = new Object();
     @foreach (var user in Model.Team)
     {
-        @:team['@user.User.Name'] = {id:@user.UserId, selected: false};
+        if(user.UserId == SessionStorage.User.Id)
+        {
+            @:appendAndClear('@user.User.Name');
+            @:team['@user.User.Name'] = {id:@user.UserId, selected: true};
+        }
+        else
+        {
+            @:team['@user.User.Name'] = {id:@user.UserId, selected: false};
+        }
     }
     var additionalPeople = new Object();
     var participantsCount = 0;
@@ -153,7 +161,7 @@ $('#meetingTime').val(Globalize.format('@Model.Meeting.EventDate.ToShortTimeStri
         var time = Globalize.parseDate($('#meetingTime').val());
         date.setHours(time.getHours());
         date.setMinutes(time.getMinutes());
-        $('#tbDatePicker').val(date);
+        $('#tbDatePicker').val(Globalize.format(date, 'F'));
 
         //create list of team
         var teamString = '';
@@ -197,5 +205,24 @@ $('#meetingTime').val(Globalize.format('@Model.Meeting.EventDate.ToShortTimeStri
              
              return date >= currentDate;
          }
-     }, 'asd');     $.validator.unobtrusive.adapters.addBool('eventLaterNow');
+     }, 'asd');
+     $.validator.unobtrusive.adapters.addBool('eventLaterNow');
+     function parseMeetingParticipants() {
+         var teamParticipants = '@Model.TeamParticipants'.split(" ");
+         var otherParticipants = '@Model.OtherParticipants'.split(" ");
+
+         for (var i = 0; i < teamParticipants.length; i++)
+             if(teamParticipants[i] != '')
+                    for(var user in team) 
+                        if (team[user].id == teamParticipants[i]) {
+                            team[user].selected=true;
+                            appendAndClear(user);
+                        }
+         for (var i = 0; i < otherParticipants.length; i++) {
+             if (otherParticipants[i] != '') {
+                 additionalPeople[otherParticipants[i]] = 1;
+                 appendAndClear(otherParticipants[i]);
+             }
+         }
+     }
 </script>

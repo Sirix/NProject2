@@ -61,11 +61,47 @@ namespace NProject {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string Global_Back {
+            get {
+                return ResourceManager.GetString("Global_Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes have been saved..
         /// </summary>
         public static string Global_ChangesSaved {
             get {
                 return ResourceManager.GetString("Global_ChangesSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Global_Delete {
+            get {
+                return ResourceManager.GetString("Global_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Global_Save {
+            get {
+                return ResourceManager.GetString("Global_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Global_Сancel {
+            get {
+                return ResourceManager.GetString("Global_Сancel", resourceCulture);
             }
         }
         
@@ -93,6 +129,24 @@ namespace NProject {
         public static string Task_Updated {
             get {
                 return ResourceManager.GetString("Task_Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit workspace.
+        /// </summary>
+        public static string Workspace_EditWS {
+            get {
+                return ResourceManager.GetString("Workspace_EditWS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New workspace.
+        /// </summary>
+        public static string Workspace_NewWS {
+            get {
+                return ResourceManager.GetString("Workspace_NewWS", resourceCulture);
             }
         }
     }

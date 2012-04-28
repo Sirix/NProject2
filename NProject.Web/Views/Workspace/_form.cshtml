@@ -1,28 +1,31 @@
-﻿@model NProject.Models.Domain.Workspace
+﻿@model NProject.Web.ViewModels.Workspace.Form
            
 @using (Html.BeginForm())
-{
-    @Html.ValidationSummary(true)
+{    @Html.ValidationSummary(true)
     <fieldset>
-        <legend>Workspace</legend>
-
+        <legend>@ViewBag.FormLegend</legend>
+        <div class="buttons-row">
+            <input type="submit" value="@Resources.Global_Save" class="btn btn-primary btn-small" />
+            <input type="button" class="btn btn-small" onclick="document.location='@Url.Action("Index", "Workspace")'" value="@Resources.Global_Сancel" />
+            @if (Model.IsEditing)
+            {
+                <input class="btn btn-small btn-danger" onclick="$('#ws_del_confirm').modal('show');"  value="@Resources.Global_Delete" type="button"/>
+            }
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Workspace.Name)
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Workspace.Name, new { @class = "span12" })
+                @Html.ValidationMessageFor(model => model.Workspace.Name)
+            </div>
+        </div>
         <div class="editor-label">
-            @Html.LabelFor(model => model.Name)
+            @Html.LabelFor(model => model.Workspace.Description)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Name)
-            @Html.ValidationMessageFor(model => model.Name)
+            @Html.TextAreaFor(model => model.Workspace.Description, new { @class = "span12", rows = 5 })
+            @Html.ValidationMessageFor(model => model.Workspace.Description)
         </div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Description)
-        </div>
-        <div class="editor-field">
-            @Html.TextAreaFor(model => model.Description)
-            @Html.ValidationMessageFor(model => model.Description)
-        </div>
-        @Html.HiddenFor(model => model.Id)
-        <p>
-            <input type="submit" value="Save" class="btn" />
-        </p>
+        @Html.HiddenFor(model => model.Workspace.Id)
     </fieldset>
 }

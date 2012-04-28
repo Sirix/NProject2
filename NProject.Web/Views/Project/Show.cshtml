@@ -6,40 +6,25 @@
 @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Index", "Workspace"), "My Workspaces" },
                                                                                                      {Url.Action("Show", "Workspace", new {id=Model.Workspace.Id}),
                                                                                                          Model.Workspace.Name}, {"", Model.Name} })
-
-<h2>@Model.Name</h2>
+<div class="page-header">
+<h1>@Model.Name</h1>
+</div>
 <div class="row" style="margin-bottom: 5px;">
   <div class="span3 offset11">
     <a class="btn btn-small" href="@Url.Action("Edit", "Project", new {id=Model.Id})"><i class="icon-cog"></i> Edit</a>
    </div>
 </div>
 <ul class="nav nav-pills">
-    <li class="active"><a href="@Url.Action("Show", "Project", new {id=Model.Id})">News</a></li>
+    <li class="active"><a href="@Url.Action("Show", "Project", new {id=Model.Id})">Information</a></li>
     <li><a href="@Url.Action("List", "Task", new {id=Model.Id})">Tasks</a></li>
     <li><a href="@Url.Action("Team", "Project", new {id=Model.Id})">Team</a></li>
+    <li><a href="@Url.Action("List", "Meeting", new {id=Model.Id})">Meetings</a></li>
+    <li><a href="@Url.Action("Report", "Project", new {id=Model.Id})">Report</a></li>
 </ul>
 
-    <a class="btn btn-small" href="@Url.Action("Create", "Meeting", new {id=Model.Id})">Request a meeting</a>
-
-<fieldset>
-    <legend>General information</legend>
-
-    <div class="display-label">Name</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Name)
-    </div>
-
-    <div class="display-label">CreationDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreationDate)
-    </div>
-
-    <div class="display-label">EndDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.EndDate)
-    </div>
-</fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<strong>Description:</strong><br />
+@Model.Description<br /><br />
+<strong>Creation date:</strong><br />
+@RazorHelpers.ConvertUtcToUserTime(Model.CreationDate)<br /><br />
+<strong>Team:</strong><br />
+@Model.Team.Count members<br /><br />

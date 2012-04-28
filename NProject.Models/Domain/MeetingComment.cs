@@ -14,12 +14,18 @@ namespace NProject.Models.Domain
 {
     public partial class MeetingComment
     {
+        public MeetingComment()
+        {
+            CreationDate = DateTime.UtcNow;
+        }
+
         public int Id { get; set; }
         public string Text { get; set; }
         public System.DateTime CreationDate { get; set; }
-    
+
+        public int AuthorId { get; set; }
         public virtual User Author { get; set; }
+        public int MeetingId { get; set; }
         public virtual Meeting Meeting { get; set; }
     }
-    
 }

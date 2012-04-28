@@ -109,9 +109,13 @@ namespace NProject.BLL
             return result;
         }
 
-        public void SaveSettings(int userId, byte hoursOffset, string locale)
+        public void UpdateUserProfile(int userId,string firstName, string lastName, string password, byte hoursOffset, string locale)
         {
             var user = Database.Users.FirstOrDefault(u => u.Id == userId);
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            if (!string.IsNullOrEmpty(password))
+                user.PasswordHash = MD5.EncryptMD5(password);
             user.HoursOffsetFromUtc = hoursOffset;
             user.Language = locale;
 

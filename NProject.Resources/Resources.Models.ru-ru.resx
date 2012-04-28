@@ -117,34 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Global_Back" xml:space="preserve">
-    <value>Back</value>
+  <data name="Workspace_Description" xml:space="preserve">
+    <value>Описание (не обязательно)</value>
   </data>
-  <data name="Global_ChangesSaved" xml:space="preserve">
-    <value>Changes have been saved.</value>
-  </data>
-  <data name="Global_Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="Global_Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="Global_Сancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="Project_Team_RemovesYouself" xml:space="preserve">
-    <value>You can't remove yourself from the ptoject team</value>
-  </data>
-  <data name="Project_Team_UserRemoved" xml:space="preserve">
-    <value>The user has been removed from the project's team.</value>
-  </data>
-  <data name="Task_Updated" xml:space="preserve">
-    <value>The task has been updated.</value>
-  </data>
-  <data name="Workspace_EditWS" xml:space="preserve">
-    <value>Edit workspace</value>
-  </data>
-  <data name="Workspace_NewWS" xml:space="preserve">
-    <value>New workspace</value>
+  <data name="Workspace_Name" xml:space="preserve">
+    <value>Название</value>
   </data>
 </root>

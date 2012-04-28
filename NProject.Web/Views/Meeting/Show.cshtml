@@ -1,0 +1,90 @@
+﻿@model NProject.Web.ViewModels.Meeting.Show
+@{
+    ViewBag.Title = "Show meeting";
+}
+@section Breadcrumbs
+{
+    @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Show", "Project", new {id = Model.ProjectId }), Model.ProjectName },
+                                                                     {Url.Action("List", "Meeting", new {id=Model.ProjectId}), "Meetings"},
+                                                                     {"", Model.Meeting.Name},
+})
+}
+<div class="page-header">
+    <h1>@Model.Meeting.Name <small>@RazorHelpers.GetUserDateTimeByUtc(Model.Meeting.EventDate).ToString("f")</small></h1>
+</div>
+@if (!Model.Meeting.Finished && !Model.HasNotYetStarted && Model.Meeting.OrganizerId == SessionStorage.User.Id)
+{
+    <div class="buttons-row">
+    @using (Html.BeginForm("FinishMeeting", "Meeting"))
+    {
+        @Html.Hidden("id", Model.Meeting.Id)
+        <input type="submit" class="btn btn-small btn-primary" value="Finish meeting" />
+            @*            <div class="pull-right">
+                <a class="btn btn-danger btn-small" href="#delete_task_modal" data-toggle="modal"><i
+                    class="icon-trash"></i>Delete </a>
+            </div>*@
+    }
+        </div>
+}
+<div style="float: left">
+    <h4>
+        Description</h4>
+    <div class="well" style="margin: 10px 0 0 0; width: 660px">
+        @Model.Meeting.Description
+    </div>
+    @if (Model.HasNotYetStarted)
+    {
+        <div class="alert" style="margin-top: 15px">
+            <strong>No history.</strong> This meeting will be started on @RazorHelpers.ConvertUtcToUserTime(Model.Meeting.EventDate)</div>
+    }
+    else if (Model.Meeting.Finished)
+    {
+        <div class="alert" style="margin-top: 15px">
+            <strong>Finished.</strong> This meeting  has been already finished.</div>
+    }
+    else
+    {
+        <div id="commentForm">
+            @using (Html.BeginForm("PostComment", "Meeting", new { id = Model.Meeting.Id }, FormMethod.Post))
+            {
+                <fieldset>
+                    <legend>History</legend>
+                    <div class="control-group" style="margin-top: 5px">
+                        <div class="controls">
+                            @Html.TextArea("message", new { @class = "span8", rows = 2, style = "margin-top:5px", data_val = "true", data_val_required = "The Message field is required." })
+                            @Html.ValidationMessage("message")
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Post" />
+                </fieldset>
+            }
+        </div>
+    }
+    <div id="comments">
+        @foreach (var cm in Model.Meeting.MeetingComments)
+        {
+            <div style="border: 1px #eee solid; padding: 5px; margin: 5px 0;">
+                <strong>@cm.Author.Name</strong> at @RazorHelpers.ConvertUtcToUserTime(cm.CreationDate)<br />
+                @cm.Text
+            </div>
+        }
+    </div>
+</div>
+<div style="float: left" class="span3">
+    <h4 style="text-align: center">
+        Participants</h4>
+    <div style="margin-top: 10px" id="selectedUsers">
+        @foreach (var user in Model.Meeting.Participants)
+        {
+            <div class="alert alert-success" style="margin-bottom: 5px">
+                @if (user.Id == Model.Meeting.OrganizerId)
+                {
+                    <i class="icon-bookmark"></i>
+                }
+                @user.Name
+            </div>
+        }
+    </div>
+</div>
+<div style="clear: both">
+</div>

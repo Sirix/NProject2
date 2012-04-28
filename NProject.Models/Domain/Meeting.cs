@@ -35,13 +35,18 @@ namespace NProject.Models.Domain
         [DataType(DataType.Date)]
         public DateTime EventDate { get; set; }
 
+        [ForeignKey("Project")]
         public int ProjectId { get; set; }
-        public Project Project { get; set; }
+        
+        public virtual Project Project { get; set; }
 
         public System.Guid AccessToken { get; set; }
+        public bool Finished { get; set; }
 
-        //public int Organizer_Id { get; set; }
+        [ForeignKey("Organizer")]
+        public int OrganizerId { get; set; }
         public virtual User Organizer { get; set; }
+
         public virtual ICollection<User> Participants { get; set; }
         public virtual ICollection<MeetingComment> MeetingComments { get; set; }
     }

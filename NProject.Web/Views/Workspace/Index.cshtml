@@ -4,15 +4,14 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/Site.Layout.cshtml";
 }
+<div class="page-header">
+<h1>My workspaces</h1>
+</div>
+<div class="buttons-row">
 
-<h2>Here is all your workspaces</h2>
-
-<div class="row" style="margin-bottom: 5px;">
-  <div class="pull-right">
         <a class="btn btn-success btn-small" href="@Url.Action("Create", "Workspace")">
             <i class="icon-plus"></i> Create
         </a>
-  </div>
 </div>
 <table class="table table-striped">
     <tr>
@@ -35,8 +34,6 @@
             @RazorHelpers.ConvertUtcToUserTime(item.CreationDate)
         </td>
         <td>
-            
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
             @Html.ActionLink("Edit", "Edit", new { id=item.Id })
         </td>
     </tr>

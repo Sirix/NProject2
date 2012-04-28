@@ -57,7 +57,7 @@ namespace NProject.Models.Domain
         public virtual ICollection<Project> ManagedProjects { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
 
-        //public virtual ICollection<Meeting> OrganizedMeetings { get; set; }
+        public virtual ICollection<Meeting> OrganizedMeetings { get; set; }
         public virtual ICollection<Meeting> Meetings { get; set; }
 
         public virtual ICollection<Invitation> ReceivedInvitations { get; set; }
@@ -79,6 +79,9 @@ namespace NProject.Models.Domain
         }
 
         [NotMapped]
-        public string Name { get { return string.Format("{0} {1}", FirstName, LastName); } }
+        public string Name
+        {
+            get { return !string.IsNullOrEmpty(FirstName) ? string.Format("{0} {1}", FirstName, LastName) : Email; }
+        }
     }
 }

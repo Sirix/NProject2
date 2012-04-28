@@ -34,6 +34,35 @@ namespace NProject.Models.Domain
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Project>().HasMany<Meeting>(p => p.Meetings).WithRequired(m => m.Project).HasForeignKey(
+                m => m.ProjectId);
+
+            //modelBuilder.Entity<Meeting>().HasRequired(m=>m.Project).WithRequiredDependent()  HasMany<Meeting>(p => p.Meetings).WithRequired(m => m.Project).HasForeignKey(
+            //    m => m.ProjectId);
+
+            //modelBuilder.Entity<Meeting>().HasRequired<User>(m => m.Organizer).WithRequiredDependent().Map(
+            //    fk => fk.MapKey("OriganizerId").ToTable("Users")).WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<Meeting>().HasMany<MeetingComment>(m => m.MeetingComments).WithRequired(i => i.Meeting).
+            //    WillCascadeOnDelete(true);
+            modelBuilder.Entity<MeetingComment>().HasRequired<Meeting>(m => m.Meeting).WithMany(m => m.MeetingComments).
+                WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<Meeting>().HasRequired<User>(m => m.Organizer).WithRequiredDependent().
+            //    WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>().HasMany<Meeting>(u => u.OrganizedMeetings).WithRequired(m => m.Organizer).
+                HasForeignKey(
+                    fk => fk.OrganizerId).WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<User>().HasMany<Meeting>(u => u.Meetings).WithMany().Map(
+            //    t=>t.MapLeftKey())
+            //    ithRequired(m => m.Organizer).
+            //    HasForeignKey(
+            //        fk => fk.OrganizerId).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Meeting>().HasRequired<User>(m => m.Organizer).WithMany(u => u.OrganizedMeetings).
+                HasForeignKey(m => m.OrganizerId).WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Meeting>().HasMany<User>(m => m.Participants).WithMany().Map(
                 t => t.MapLeftKey("UserId").MapRightKey("MeetingId").ToTable("MeetingParticipants"));
 

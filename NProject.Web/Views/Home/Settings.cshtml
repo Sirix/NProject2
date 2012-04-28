@@ -7,42 +7,44 @@
     @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Index", "Home"), "NProject" },
                                                                      {"", "Settings"} })
 }
-<h2>User settings</h2>
-<table>
-    <tbody>
-        <tr>
-            <td>
-                UI language: <a class="btn btn-info btn-small" onclick="setUILanguage('en-us')"><i
-                    class="icon-comment"></i>English</a> <a class="btn btn-info btn-small" onclick="setUILanguage('ru-ru')">
-                        <i class="icon-comment"></i>Русский</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
     <fieldset>
-        <legend></legend>
-        <div style="padding-top: 5px; border-bottom: 1px solid #EEE;">
+        <legend>Settings</legend>
+        <div class="buttons-row">
             <input type="submit" class="btn btn-small btn-primary" value="Save" />
-            @*            <div class="pull-right">
-                <a class="btn btn-danger btn-small" href="#delete_task_modal" data-toggle="modal"><i
-                    class="icon-trash"></i>Delete </a>
-            </div>*@
         </div>
-            <div class="control-group">
-                @Html.LabelFor(model => model.Locale)
+        <div class="control-group">
+                @Html.LabelFor(model => model.FirstName)
                 <div class="controls">
-                    @Html.TextBoxFor(model => model.Locale)
-                    @Html.ValidationMessageFor(model => model.Locale)
+                    @Html.TextBoxFor(model => model.FirstName)
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+            </div><div class="control-group">
+                @Html.LabelFor(model => model.LastName)
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.LastName)
+                    @Html.ValidationMessageFor(model => model.LastName)
                 </div>
             </div>
             <div class="control-group">
-                @Html.LabelFor(model => model.HoursOffset)
+                @Html.LabelFor(model => model.Email)
                 <div class="controls">
-                    @Html.TextBoxFor(model => model.HoursOffset)
-                    @Html.ValidationMessageFor(model => model.HoursOffset)
+                    @Html.TextBoxFor(model => model.Email, new { disabled = "disabled" })
+                </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Language)
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.Language)
+                    @Html.ValidationMessageFor(model => model.Language)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.HoursOffsetFromUtc)
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.HoursOffsetFromUtc)
+                    @Html.ValidationMessageFor(model => model.HoursOffsetFromUtc)
                 </div>
             </div>
     </fieldset>

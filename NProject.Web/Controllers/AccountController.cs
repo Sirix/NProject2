@@ -46,7 +46,7 @@ namespace NProject.Controllers
         public ActionResult LogOn()
         {
             if(Request.IsAuthenticated)
-                return RedirectToAction("index", "home");
+                return RedirectToAction("Index", "Home");
 
             return View(new LogOnModel {Email = "manager", Password = "manager"});
         }
@@ -63,19 +63,13 @@ namespace NProject.Controllers
                     SessionStorage.User = new UserSessionInfo
                                               {
                                                   Id = user.Id,
-                                                  UserName = user.FirstName + user.LastName,
+                                                  UserName = user.Name,
                                                   HoursOffsetFromUtc = user.HoursOffsetFromUtc
                                               };
 
                     if (!String.IsNullOrEmpty(returnUrl))
-                    {
                         return Redirect(returnUrl);
-                    }
-                    //else
-                    //{
-                    //    var loc = UserService.GetDefaultLocationForRole(user.Role).Split('/');
-                    //    return RedirectToAction(loc[1], loc[0]);
-                    //}
+
                 }
                 else
                 {

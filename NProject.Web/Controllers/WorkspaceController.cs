@@ -2,12 +2,13 @@
 using NProject.BLL;
 using NProject.Models.Domain;
 using NProject.Web.Helpers;
+using NProject.Web.ViewModels.Workspace;
 
 namespace NProject.Web.Controllers
 {
     [Authorize]
     [HandleError]
-    public class WorkspaceController : Controller
+    public class WorkspaceController : BaseController
     {
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -31,17 +32,17 @@ namespace NProject.Web.Controllers
         public ActionResult Create()
         {
             //TODO: Check for user account type, if it is free or not
-            return View();
+            return View(new Form {Workspace = new Workspace()});
         }
 
         [Authorize]
         [HttpPost]
-        public ActionResult Create(Workspace workspace)
+        public ActionResult Create(Form form)
         {
-            if (!ModelState.IsValid) return View(workspace);
+            if (!ModelState.IsValid) return View(form);
 
-            workspace.Owner = new UserService().GetUser(SessionStorage.User.Id);
-            new WorkspaceService().AddWorkspace(workspace);
+            form.Workspace.Owner = new UserService().GetUser(SessionStorage.User.Id);
+            new WorkspaceService().AddWorkspace(form.Workspace);
 
             //TODO: Check for user account type, if it is free or not
             return RedirectToAction("Index");
@@ -63,19 +64,19 @@ namespace NProject.Web.Controllers
             var ws = new WorkspaceService();
             var workspace = ws.GetWorkspace(id);
             if (workspace != null && ws.IsUserCanInteractWithWorkspace(SessionStorage.User.Id, id))
-                return View(workspace);
+                return View(new Form() {Workspace = workspace, IsEditing = true});
 
             this.SetTempMessage("You can't see this page.", "error");
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult Edit(Workspace workspace)
+        public ActionResult Edit(Form form)
         {
             var ws = new WorkspaceService();
-            if (ws.IsUserCanInteractWithWorkspace(SessionStorage.User.Id, workspace.Id))
+            if (ws.IsUserCanInteractWithWorkspace(SessionStorage.User.Id, form.Workspace.Id))
             {
-                ws.UpdateWorkspace(workspace);
+                ws.UpdateWorkspace(form.Workspace);
                 this.SetTempMessage("Workspace has been updated.", "success");
             }
             return RedirectToAction("Index");

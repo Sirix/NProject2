@@ -1,0 +1,70 @@
+﻿@model NProject.Web.ViewModels.Meeting.List
+
+@{
+    ViewBag.Title = "List";
+}
+@section Breadcrumbs
+{
+    @RazorHelpers.RenderBreadcrumbs(new Dictionary<string, string> { { Url.Action("Show", "Project", new {id = Model.ProjectId }), Model.ProjectName },
+                                                                     {"", "Meetings"} })
+}
+<h2>Project's meetings</h2>
+     <div class="row" style="margin-bottom: 5px;">
+     <div style="display: inline; margin-left:20px" class="controls">
+     Show: 
+     <select onchange="javascript:document.location.search = 'show='+this.value" id="taskFilter">
+        <option value="all">All meetings</option>
+        <option value="past">Past</option>
+        <option value="future" selected="selected">Future</option>
+     </select>
+     </div>
+     @if (Model.CanUserEditMeetings)
+     {
+         <div class="pull-right">
+             <a class="btn btn-success btn-small" href="@Url.Action("Create", "Meeting", new {id = Model.ProjectId})">
+                 <i class="icon-plus"></i> Create new
+             </a>
+         </div>
+     }
+     </div>
+ 
+<table  class="table table-striped">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Begin date
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Meetings)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @RazorHelpers.ConvertUtcToUserTime(item.EventDate)
+        </td>
+        <td>
+            @Html.ActionLink("Show", "Show", new {id = item.Id})
+            @if (Model.CanUserEditMeetings && !item.Finished)
+            {
+                @:| @Html.ActionLink("Edit", "Edit", new {id = item.Id})
+            }
+        </td>
+    </tr>
+}
+
+</table>
+<script type="text/javascript">
+    document.getElementById('taskFilter').value = '@Model.MeetingFilter';
+</script>

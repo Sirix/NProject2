@@ -40,6 +40,7 @@ namespace NProject.Models.Domain
         public virtual ICollection<Task> Tasks { get; set; }
         public virtual ICollection<Invitation> Invitations { get; set; }
         public virtual ICollection<TeamMate> Team { get; set; }
+        public virtual ICollection<Meeting> Meetings { get; set; }
 
         #region CostType
 

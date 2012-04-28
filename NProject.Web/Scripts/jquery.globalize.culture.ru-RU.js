@@ -79,4 +79,4 @@ Globalize.addCultureInfo( "ru-RU", "default", {
 	}
 });
 
-}( this ));
+} (this));

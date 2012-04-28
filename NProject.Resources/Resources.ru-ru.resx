@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="asdasd" xml:space="preserve">
-    <value />
+  <data name="Global_Back" xml:space="preserve">
+    <value>Назад</value>
   </data>
-  <data name="TASK_UPDATED" xml:space="preserve">
-    <value>The task has been updated</value>
+  <data name="Global_Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Global_Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Global_Сancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Workspace_EditWS" xml:space="preserve">
+    <value>Изменение рабочего пространства</value>
+  </data>
+  <data name="Workspace_NewWS" xml:space="preserve">
+    <value>Новое рабочее пространство</value>
   </data>
 </root>
