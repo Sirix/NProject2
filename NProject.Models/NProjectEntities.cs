@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Configuration;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using NProject.Models.Infrastructure;
 
@@ -26,7 +28,10 @@ namespace NProject.Models.Domain
     {
         static NProjectEntities()
         {
-            Database.SetInitializer(new NProjectTestDatabaseInitializer());
+            if (ConfigurationManager.AppSettings["AppHarbor"] == "true")
+                Database.SetInitializer(new NProjectKeepDbInitializer());
+            else
+                Database.SetInitializer(new NProjectTestDatabaseInitializer());
         }
         public NProjectEntities()
             : base("name=NProjectEntities")

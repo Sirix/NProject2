@@ -36,11 +36,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Infrastructure\IEntityWithIntegerKey.cs" />
     <Compile Include="Infrastructure\NProjectDatabaseInitializer.cs" />
+    <Compile Include="Infrastructure\NProjectKeepDbInitializer.cs" />
     <Compile Include="Infrastructure\NProjectTestDatabaseInitializer.cs" />
     <Compile Include="Domain\Invitation.cs">
       <SubType>Code</SubType>
