@@ -28,7 +28,7 @@ namespace NProject.Models.Domain
     {
         static NProjectEntities()
         {
-            if (ConfigurationManager.AppSettings["AppHarbor"] == "true")
+            if (ConfigurationManager.AppSettings["AppHb"] == "true")
                 Database.SetInitializer(new NProjectKeepDbInitializer());
             else
                 Database.SetInitializer(new NProjectTestDatabaseInitializer());
