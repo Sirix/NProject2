@@ -20,7 +20,7 @@ namespace NProject.Models.Infrastructure
 			}
 			if (flag)
 			{
-				bool throwIfNoMetadata = true;
+				bool throwIfNoMetadata = false;
                 if (!context.Database.CompatibleWithModel(throwIfNoMetadata))
                 {
                     // remove all tables
