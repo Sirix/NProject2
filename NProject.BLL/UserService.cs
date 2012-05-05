@@ -29,7 +29,7 @@ namespace NProject.BLL
             return user;
         }
 
-        public User CreateUser(string name, string email, string password, byte timeshift)
+        public User CreateUser(string name,string lastName, string email, string password, byte timeshift)
         {
             //we have unique email constraint in db, so no need to check it here
             try
@@ -38,12 +38,13 @@ namespace NProject.BLL
                                                    {
                                                        Email = email,
                                                        FirstName = name,
-                                                       LastName = "",
+                                                       LastName = lastName,
                                                        HoursOffsetFromUtc = timeshift,
                                                        PasswordHash = MD5.EncryptMD5(password),
                                                        RegistrationDate = DateTime.UtcNow
                                                    });
                 Database.SaveChanges();
+                MessageService.SendRegistrationGreetings(email, user.Name, password);
                 return user;
             }
             catch (Exception ex)

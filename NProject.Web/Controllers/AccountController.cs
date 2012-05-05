@@ -14,9 +14,9 @@ using Microsoft.Practices.Unity;
 using NProject.BLL;
 using NProject.Models;
 using NProject.Models.Domain;
-using NProject.ViewModels.Account;
 using NProject.Web.Helpers;
 using Microsoft.Practices.ServiceLocation;
+using NProject.Web.ViewModels.Account;
 
 namespace NProject.Controllers
 {
@@ -151,13 +151,21 @@ namespace NProject.Controllers
 
             try
             {
-                var user = UserService.CreateUser(model.Name, model.Email, model.Password, model.TimeShiftFromUtc);
-                FormsAuthentication.SetAuthCookie(model.Email, true);
-                //store use id
-                SessionStorage.User.Id = user.Id;
+                var user = UserService.CreateUser(model.Name, model.LastName, model.Email, model.Password,
+                                                  model.TimeShiftFromUtc);
 
+                FormsAuthentication.SetAuthCookie(model.Email, true);
+
+                //store user data
+                SessionStorage.User = new UserSessionInfo()
+                                          {
+                                              Id = user.Id,
+                                              UserName = user.Name,
+                                              HoursOffsetFromUtc = user.HoursOffsetFromUtc
+                                          };
+                
                 //create first default company
-                new WorkspaceService().Create(user.Email + "-company", user);
+                new WorkspaceService().Create(user.Email + "-workspace", user);
 
                 TempData["SuccessMessage"] = "Your account has been created!";
                 return RedirectToAction("Index", "Workspace");

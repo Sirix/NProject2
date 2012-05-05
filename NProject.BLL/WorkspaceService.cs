@@ -16,7 +16,10 @@ namespace NProject.BLL
         public Workspace Create(string name, User owner)
         {
             var ws = new Workspace {Name = name, Owner = owner};
-            return Database.Workspaces.Add(ws);
+            Database.Workspaces.Add(ws);
+            Database.SaveChanges();
+
+            return ws;
         }
 
         public IEnumerable<Project> GetProjectsInWorkspace(int workspaceId)

@@ -37,6 +37,7 @@ namespace NProject.Models.Domain
             : base("name=NProjectEntities")
         {
         }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Project>().HasMany<Meeting>(p => p.Meetings).WithRequired(m => m.Project).HasForeignKey(
