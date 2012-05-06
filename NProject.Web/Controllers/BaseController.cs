@@ -5,11 +5,27 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using NProject.Web.Helpers;
 
 namespace NProject.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+
+            //Check session
+            //if ( !new[] { "Account", "Home" }.Contains(Request.RequestContext.RouteData.Values["Controller"].ToString()))
+            if (Request.IsAuthenticated && SessionStorage.User == null)
+            {
+                FormsAuthentication.SignOut();
+                filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
+            }
+
+        }
+
         private const string DefaultCulture = "en-us";
 
         protected override void ExecuteCore()
@@ -35,6 +51,7 @@ namespace NProject.Web.Controllers
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
+          
             base.ExecuteCore();
         }
 

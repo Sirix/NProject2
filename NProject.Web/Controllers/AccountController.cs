@@ -1,27 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Data.Objects.SqlClient;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
-using Microsoft.Practices.Unity;
 using NProject.BLL;
 using NProject.Models;
-using NProject.Models.Domain;
 using NProject.Web.Helpers;
-using Microsoft.Practices.ServiceLocation;
 using NProject.Web.ViewModels.Account;
 
-namespace NProject.Controllers
+namespace NProject.Web.Controllers
 {
     [HandleError]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public UserService UserService { get; set; }
 
@@ -29,7 +17,6 @@ namespace NProject.Controllers
         {
             UserService = new UserService();
         }
-
 
         //public IFormsAuthenticationService FormsService { get; set; }
 

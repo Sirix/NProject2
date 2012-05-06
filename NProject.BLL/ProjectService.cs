@@ -12,42 +12,10 @@ namespace NProject.BLL
 {
     public class ProjectService : BaseService
     {
-        public IEnumerable<Project> GetProjectListForUserByRole(int userId)
-        {
-            IEnumerable<Project> projects = Enumerable.Empty<Project>();
-
-            var user = Database.Users.Single(i => i.Id == userId);
-            return projects = Database.Projects.ToList();
-            ////;
-            ////switch (user.Role)
-            ////{
-            ////    case UserRole.TopManager:
-            ////        projects = Database.Projects.ToList();
-            ////        break;
-
-            ////    case UserRole.Customer:
-            ////        projects = Database.Projects.Where(p => p.Customer.Id == user.Id).ToList();
-            ////        break;
-
-            ////    //case "PM":
-
-            ////    //    projects = Database.Projects.ToList().Where(p => p.Team.Contains(user)).ToList();
-            ////    //    break;
-
-            ////    case UserRole.Programmer:
-            ////    case UserRole.Manager:
-            ////        projects = user.Projects.ToList();
-            ////        break;
-            ////}
-
-            ////return projects;
-        }
-
         public Project GetProjectById(int id)
         {
             return Database.Projects.SingleOrDefault(p => p.Id == id);
         }
-
 
         public IEnumerable<Project> GetProjectsInWorkspace(int workspaceId)
         {

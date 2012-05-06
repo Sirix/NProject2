@@ -15,7 +15,7 @@ namespace NProject.Web.Helpers
     {
         public static UserSessionInfo User
         {
-            get { return HttpContext.Current.Session["UserSessionInfo"] as UserSessionInfo; }
+            get { return (UserSessionInfo) HttpContext.Current.Session["UserSessionInfo"]; }
             set { HttpContext.Current.Session["UserSessionInfo"] = value; }
         }
     }

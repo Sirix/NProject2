@@ -13,7 +13,7 @@ namespace NProject.Web.Controllers
 {
     [HandleError]
     [Authorize]
-    public class ProjectController : Controller
+    public class ProjectController : BaseController
     {
         public ActionResult Create(int id)
         {

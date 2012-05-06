@@ -9,7 +9,7 @@ using NProject.Web.Helpers;
 
 namespace NProject.Web.Controllers
 {
-    public class MessageController : Controller
+    public class MessageController : BaseController
     {
         //
         // GET: /Message/

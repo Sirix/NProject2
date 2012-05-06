@@ -9,7 +9,7 @@ namespace NProject.Web.Controllers
 {
     [HandleError]
     [Authorize]
-    public class TaskController : Controller
+    public class TaskController : BaseController
     {
         public ActionResult List(int id, string show = "active")
         {

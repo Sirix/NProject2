@@ -7,9 +7,9 @@
       <div class="hero-unit">
         <h1>Hello to NProject!</h1>
         <p>NProject is a lightweight project management system</p>
-           @using (Html.BeginForm("SimpleRegistration", "Account")) {
-            @Html.AntiForgeryToken()
-            <text>E-mail:</text> @Html.TextBox("Email")
-        <input type="submit" value="Register!" class="btn primary large" />
-    }
-</div>
+          @using (Html.BeginForm("SimpleRegistration", "Account")) {
+                                                                       @Html.AntiForgeryToken()
+                                                                       @:E-mail: @Html.TextBox("Email")
+                                                                       <input type="submit" value="Register!" class="btn primary large" />
+                                                                   }
+      </div>

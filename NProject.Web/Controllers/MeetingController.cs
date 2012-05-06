@@ -9,7 +9,7 @@ namespace NProject.Web.Controllers
 {
     [HandleError]
     [Authorize]
-    public class MeetingController : Controller
+    public class MeetingController : BaseController
     {
         private ProjectService ps = new ProjectService();
 
