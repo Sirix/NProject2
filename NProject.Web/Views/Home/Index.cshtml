@@ -2,14 +2,21 @@
     ViewBag.Title = "NProject";
     Layout = "~/Views/Shared/Site.Layout.cshtml";
 }
-
-     <!-- Main hero unit for a primary marketing message or call to action -->
-      <div class="hero-unit">
-        <h1>Hello to NProject!</h1>
-        <p>NProject is a lightweight project management system</p>
-          @using (Html.BeginForm("SimpleRegistration", "Account")) {
-                                                                       @Html.AntiForgeryToken()
-                                                                       @:E-mail: @Html.TextBox("Email")
-                                                                       <input type="submit" value="Register!" class="btn primary large" />
-                                                                   }
-      </div>
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="hero-unit">
+    <h1>
+        Hello to NProject!</h1>
+    <p>
+        NProject is a lightweight project management system</p>
+    @using (Html.BeginForm("SimpleRegistration", "Account"))
+    {
+        @Html.AntiForgeryToken()
+        <div class="control-group" style="display: inline">
+            <label style="display: inline">E-mail</label>
+            <div class="controls" style="display: inline">@Html.TextBox("Email", "", new { data_val = "true", data_val_required = "Please, input email.", data_val_email = "Please, input email." })
+                @Html.ValidationMessage("Email", new { style = "display:inline" })
+            </div>
+        </div>      
+        <input type="submit" value="Register!" class="btn primary large" />
+    }
+</div>
