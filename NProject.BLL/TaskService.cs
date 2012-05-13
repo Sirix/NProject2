@@ -32,8 +32,11 @@ namespace NProject.BLL
 
         public void AddTask(int projectId, Task task)
         {
-            task.Status = task.ResponsibleId.GetValueOrDefault() >= 1 ? TaskStatus.Assigned : TaskStatus.Created;
-
+            if (task.ResponsibleId.GetValueOrDefault() < 1)
+                task.ResponsibleId = null;
+            else
+                task.Status = TaskStatus.Assigned;
+            
             Database.Tasks.Add(task);
             Database.SaveChanges();
         }

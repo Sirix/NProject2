@@ -51,7 +51,7 @@ namespace NProject.Web.Controllers
                                 ProjectId = id,
                                 IsCreation = true
                             };
-            model.Users.Add(new SelectListItem {Text = "Free assigning", Value = ""});
+            model.Users.Add(new SelectListItem {Text = "Free assigning", Value = "0"});
 
             return View(model);
         }
