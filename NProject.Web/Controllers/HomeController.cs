@@ -19,8 +19,10 @@ namespace NProject.Web.Controllers
             }
             else
             {
-                if(!string.IsNullOrEmpty(Request["ReturnUrl"]))
+                if (Session["Expired"] == null && !string.IsNullOrEmpty(Request["ReturnUrl"]))
                     this.SetTempMessage("Please, sign in to use the site", "error");
+
+                Session["Expired"] = null;
                 return View();
             }
         }

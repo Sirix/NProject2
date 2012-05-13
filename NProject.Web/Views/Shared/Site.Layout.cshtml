@@ -24,6 +24,7 @@
 
         using (Html.BeginForm("Logon", "Account", FormMethod.Post, new {@class = "navbar-search pull-right"}))
         {
+            <input type="hidden" name="returnUrl" value="@Request["returnUrl"]" />
             <input class="input-small" type="text" placeholder="E-mail" name="email" value="Sirix25@gmail.com"/>
             <input class="input-small" type="password" placeholder="Password" name="password" value="1234567890"/>
 

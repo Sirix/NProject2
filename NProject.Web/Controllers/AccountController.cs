@@ -67,7 +67,7 @@ namespace NProject.Web.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         // **************************************

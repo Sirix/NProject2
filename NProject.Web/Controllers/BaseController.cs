@@ -17,11 +17,14 @@ namespace NProject.Web.Controllers
             base.OnActionExecuting(filterContext);
 
             //Check session
-            //if ( !new[] { "Account", "Home" }.Contains(Request.RequestContext.RouteData.Values["Controller"].ToString()))
             if (Request.IsAuthenticated && SessionStorage.User == null)
             {
+                Session["Expired"] = true;
+                SetTempMessage("Your session expired. Please sign in again.", "Error");
                 FormsAuthentication.SignOut();
-                filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
+                filterContext.Result =
+                    new RedirectResult(string.Format("{0}?returnUrl={1}", FormsAuthentication.LoginUrl,
+                                                     filterContext.HttpContext.Request.RawUrl));
             }
 
         }
