@@ -67,10 +67,15 @@ namespace NProject.BLL
 
         public void SendInvite(int inviteeId, int senderId, int projectId)
         {
+            var sender = Database.Users.First(u => u.Id == senderId);
+            var invitee = Database.Users.First(u => u.Id == inviteeId);
+            var project = Database.Projects.First(p => p.Id == projectId);
+
+            MessageService.SendProjectInvite(invitee.Email,invitee.Name, sender.Name, project.Name, project.Description, true);
             Database.Invitations.Add(new Invitation
                                          {
-                                             Invitee = Database.Users.First(u => u.Id == inviteeId),
-                                             Sender = Database.Users.First(u => u.Id == senderId),
+                                             Invitee = invitee,
+                                             Sender = sender,
                                              ProjectId = projectId
                                          });
             Database.SaveChanges();
