@@ -60,19 +60,6 @@ namespace NProject.BLL
             Database.SaveChanges();
         }
 
-        public bool IsUserCanSeeTaskList(int projectId, int userId)
-        {
-            return true;
-        }
-        public bool CanUserEditTasksInProject(int projectId, int userId)
-        {
-            return true;
-        }
-        public bool CanUserWorkWithTask(int taskId, int userId)
-        {
-            //GetTask(taskId).
-            return true;
-        }
         public bool IsUserAllowedToDo(int taskId, int userId, TaskAction action)
         {
             bool result = false;

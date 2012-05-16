@@ -81,48 +81,6 @@ namespace NProject.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // **************************************
-        // URL: /Account/ChangePassword
-        // **************************************
-
-        [Authorize]
-        public ActionResult ChangePassword()
-        {
-            ViewData["PasswordLength"] = 2;
-            return View();
-        }
-
-        //[Authorize]
-        //[HttpPost]
-        //public ActionResult ChangePassword(ChangePasswordModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (UserService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
-        //        {
-        //            return RedirectToAction("ChangePasswordSuccess");
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-        //        }
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    ViewData["PasswordLength"] = 2;
-        //    return View(model);
-        //}
-
-        // **************************************
-        // URL: /Account/ChangePasswordSuccess
-        // **************************************
-
-        public ActionResult ChangePasswordSuccess()
-        {
-            return View();
-        }
-
-
         public ActionResult SimpleRegistration(string email)
         {
             //TODO: send an e-mail
