@@ -12,6 +12,25 @@ namespace NProject.BLL
 {
     internal class MessageService
     {
+        public static void SendEmail(string email, string subject, string message)
+        {
+            try
+            {
+                SmtpClient client = new SmtpClient();
+                MailMessage mm = new MailMessage("nproject.service@gmail.com", email)
+                                     {
+                                         IsBodyHtml = true,
+                                         Subject = subject,
+                                         Body = message
+                                     };
+
+                client.SendAsync(mm, null);
+            }
+            catch
+            {
+            }
+
+        }
         private static string SiteUrl
         {
             get { return ConfigurationManager.AppSettings["SiteUrl"]; }
