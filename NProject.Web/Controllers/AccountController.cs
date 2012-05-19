@@ -18,18 +18,6 @@ namespace NProject.Web.Controllers
             UserService = new UserService();
         }
 
-        //public IFormsAuthenticationService FormsService { get; set; }
-
-        //[Dependency]
-        //public IMembershipService MembershipService { get; set; }
-
-        //[Dependency]
-        //public IAccessPoint AccessPoint { get; set; }
-
-        // **************************************
-        // URL: /Account/LogOn
-        // **************************************
-
         public ActionResult LogOn()
         {
             if(Request.IsAuthenticated)
