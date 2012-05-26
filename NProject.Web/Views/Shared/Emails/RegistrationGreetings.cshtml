@@ -12,6 +12,6 @@ Your login data:<br/>
 <b>Login:</b> @Model.Email<br/>
 <b>Password:</b> @Model.Password (only you know your password)<br/>
 <br/>
-Use this data to sign in on <a href="@Url.AbsoluteAction("Index", "Home")">NProject</a><br/>
+Use this data to sign in on @Html.AbsActionLink("NProject", "Index", "Home")<br/>
 <br/>
 <br/>
