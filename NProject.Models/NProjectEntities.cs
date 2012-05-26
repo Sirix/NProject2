@@ -28,10 +28,10 @@ namespace NProject.Models.Domain
     {
         static NProjectEntities()
         {
-            if (ConfigurationManager.AppSettings["AppHb"] == "true")
+          //  if (ConfigurationManager.AppSettings["AppHb"] == "true")
                 Database.SetInitializer(new NProjectKeepDbInitializer());
-            else
-                Database.SetInitializer(new NProjectTestDatabaseInitializer());
+            ///else
+               // Database.SetInitializer(new NProjectTestDatabaseInitializer());
         }
         public NProjectEntities()
             : base("name=NProjectEntities")
@@ -42,6 +42,8 @@ namespace NProject.Models.Domain
         {
             modelBuilder.Entity<Project>().HasMany<Meeting>(p => p.Meetings).WithRequired(m => m.Project).HasForeignKey(
                 m => m.ProjectId);
+
+            modelBuilder.Entity<Invitation>().HasOptional<User>(i => i.Invitee).WithMany(u => u.ReceivedInvitations);
 
             //modelBuilder.Entity<Meeting>().HasRequired(m=>m.Project).WithRequiredDependent()  HasMany<Meeting>(p => p.Meetings).WithRequired(m => m.Project).HasForeignKey(
             //    m => m.ProjectId);
@@ -72,7 +74,7 @@ namespace NProject.Models.Domain
             modelBuilder.Entity<Meeting>().HasMany<User>(m => m.Participants).WithMany().Map(
                 t => t.MapLeftKey("UserId").MapRightKey("MeetingId").ToTable("MeetingParticipants"));
 
-            modelBuilder.Entity<User>().HasMany<Invitation>(u => u.ReceivedInvitations).WithRequired(i => i.Invitee);
+           // modelBuilder.Entity<User>().HasMany<Invitation>(u => u.ReceivedInvitations).WithRequired(i => i.Invitee);
         }
 
         public IDbSet<User> Users { get; set; }

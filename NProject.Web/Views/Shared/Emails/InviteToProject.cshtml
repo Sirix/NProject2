@@ -1,17 +1,38 @@
 ﻿@model NProject.Models.Domain.Invitation
 @{
+    bool invitationForRegistered = string.IsNullOrEmpty(Model.InviteeEmail);
     Layout = "_emailLayout.cshtml";
 }
-Hello, @Model.Invitee.Name!<br />
+@if (invitationForRegistered)
+{
+    @:Hello, @Model.Invitee.Name!<br />
+}
+else
+{
+    @:Hello, @Model.InviteeEmail!<br />
+}
 <br />
 You have been invited by @Model.Sender.Name to join project "@Model.Project.Name"
 on NProject.<br />
-You can choose one of the following:<br />
-<ul>
-    <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "accept" })">Accept invitation</a>
-        (you would be a part of project's team);</li>
-    <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "decline" })">Decline invitation</a>
-        (we will politely inform sender about your decline);</li>
-    <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "block" })">Block invitation</a>
-        (you would not receive invitations from this user more).</li>
-</ul>
+@if (invitationForRegistered)
+{
+    <text> You can choose one of the following:<br />
+    <ul>
+        <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "accept" })">
+            Accept invitation</a> (you would be a part of project's team);</li>
+        <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "decline" })">
+            Decline invitation</a> (we will politely inform sender about your decline);</li>
+        <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "block" })">
+            Block invitation</a> (you would not receive invitations from this user more).</li>
+    </ul>
+    </text>
+}
+else
+{
+    <text><br /> However, it seems that you have not registered on NProject.<br />
+    Click <a href="@Url.AbsoluteAction("SimpleRegistration", "Account")">here</a> to register - it is free and easy.<br />
+    <br />
+    Or you can <a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "block" })">
+        block</a> invitations from this user. You will not receive it more.
+    </text>
+}

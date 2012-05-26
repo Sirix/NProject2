@@ -116,8 +116,10 @@ namespace NProject.Web.Controllers
                 int uid = us.GetUserIdByEmail(email);
                 if (uid == -1)
                 {
-
-                    //send an e-mail
+                    var i = us.SendInvite(email, SessionStorage.User.Id, id);
+                    var html = RenderEmailToString("InviteToProject", i);
+                    MessageService.SendEmail(i.InviteeEmail, "Invitation", html);
+                    return new ContentResult { Content = "Message sent!" };
                 }
                 else
                 {

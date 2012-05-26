@@ -28,7 +28,7 @@ namespace NProject.Models.Domain
 
         //[ForeignKey("Sender")]
      //   public int SenderId { get; set; }
-
+        
         public virtual User Sender { get; set; }
 
         //   [ForeignKey("Invitee")]

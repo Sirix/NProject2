@@ -21,16 +21,7 @@ namespace NProject.Models.Infrastructure
 			if (flag)
 			{
 				bool throwIfNoMetadata = false;
-                if (!context.Database.CompatibleWithModel(throwIfNoMetadata))
-                {
-                    // remove all tables
-                    context.Database.ExecuteSqlCommand("EXEC sp_MSforeachtable @command1 = \"DROP TABLE ?\"");
-
-
-                    // create all tables
-                    var dbCreationScript = ((IObjectContextAdapter) context).ObjectContext.CreateDatabaseScript();
-                    context.Database.ExecuteSqlCommand(dbCreationScript);
-                }
+			    context.Database.CompatibleWithModel(throwIfNoMetadata);
 			}
 		}
 
