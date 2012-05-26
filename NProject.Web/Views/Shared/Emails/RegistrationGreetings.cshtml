@@ -1,0 +1,17 @@
+﻿@model NProject.Web.ViewModels.Account.SimpleRegistration
+@{
+    Layout = "_emailLayout.cshtml";
+}
+Hello, @Model.Name @Model.LastName!<br />
+<br />
+You have successfully registered on NProject.<br />
+Now you can take all advantages of our service.
+<br/>
+<br/>
+Your login data:<br/>
+<b>Login:</b> @Model.Email<br/>
+<b>Password:</b> @Model.Password (only you know your password)<br/>
+<br/>
+Use this data to sign in on <a href="@Url.AbsoluteAction("Index", "Home")">NProject</a><br/>
+<br/>
+<br/>

@@ -44,7 +44,6 @@ namespace NProject.BLL
                                                        RegistrationDate = DateTime.UtcNow
                                                    });
                 Database.SaveChanges();
-                MessageService.SendRegistrationGreetings(email, user.Name, password);
                 return user;
             }
             catch (Exception ex)

@@ -90,15 +90,19 @@ namespace NProject.Web.Controllers
                 FormsAuthentication.SetAuthCookie(model.Email, true);
 
                 //store user data
-                SessionStorage.User = new UserSessionInfo()
+                SessionStorage.User = new UserSessionInfo
                                           {
                                               Id = user.Id,
                                               UserName = user.Name,
                                               HoursOffsetFromUtc = user.HoursOffsetFromUtc
                                           };
                 
-                //create first default company
+                //create first default workspace
                 new WorkspaceService().Create(user.Email + "-workspace", user);
+
+                //send email
+                string html = RenderEmailToString("RegistrationGreetings", model);
+                MessageService.SendEmail(user.Email, "Welcome to NProject!", html);
 
                 TempData["SuccessMessage"] = "Your account has been created!";
                 return RedirectToAction("Index", "Workspace");
