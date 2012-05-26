@@ -18,12 +18,12 @@ on NProject.<br />
 {
     <text> You can choose one of the following:<br />
     <ul>
-        <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "accept" })">
-            Accept invitation</a> (you would be a part of project's team);</li>
-        <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "decline" })">
-            Decline invitation</a> (we will politely inform sender about your decline);</li>
-        <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "block" })">
-            Block invitation</a> (you would not receive invitations from this user more).</li>
+        <li>@Html.AbsActionLink("Accept invitation", "ProcessInvite", "Project", new { id = Model.Id, verb = "accept" })
+        (you would be a part of project's team);</li>
+        <li>@Html.AbsActionLink("Decline invitation", "ProcessInvite", "Project", new { id = Model.Id, verb = "decline" })
+        (we will politely inform sender about your decline);</li>
+        <li>@Html.AbsActionLink("Block invitation", "ProcessInvite", "Project", new { id = Model.Id, verb = "block" })
+        (you would not receive invitations from this user more).</li>
     </ul>
     </text>
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
@@ -108,6 +109,18 @@ namespace NProject.Web.Helpers
             string scheme = url.RequestContext.HttpContext.Request.Url.Scheme;
 
             return url.Action(actionName, controllerName, routeValues, scheme);
+        }
+        public static MvcHtmlString AbsActionLink(this HtmlHelper helper, string linkText, string actionName, string controllerName, object routeValues = null, object htmlAttributes = null)
+        {
+            var temp =
+                helper.ActionLink(linkText, actionName, controllerName, "http", HttpContext.Current.Request.Url.Host, "",
+                                  routeValues, htmlAttributes).ToString();
+            //return temp;
+
+            //remove port in result html
+            temp = temp.Replace(HttpContext.Current.Request.Url.Authority, HttpContext.Current.Request.Url.Host);
+
+            return new MvcHtmlString(temp);
         }
     }
 }
