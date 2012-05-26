@@ -10,7 +10,7 @@ using NProject.Models.Domain;
 
 namespace NProject.BLL
 {
-    internal class MessageService
+    public class MessageService
     {
         public static void SendEmail(string email, string subject, string message)
         {

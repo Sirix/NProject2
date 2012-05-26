@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web;
@@ -67,6 +68,27 @@ namespace NProject.Web.Controllers
         public void SetTempMessage(string message, string messageLevel)
         {
             TempData[messageLevel + "Message"] = message;
+        }
+
+        public string RenderEmailToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            try
+            {
+                using (StringWriter sw = new StringWriter())
+                {
+                    ViewEngineResult viewResult = ViewEngines.Engines.FindView(ControllerContext, "Emails/" + viewName,
+                                                                               "Emails/_emailLayout");
+                    ViewContext viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                    viewResult.View.Render(viewContext, sw);
+
+                    return sw.GetStringBuilder().ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
         }
 
         //protected override void OnActionExecuted(ActionExecutedContext filterContext)

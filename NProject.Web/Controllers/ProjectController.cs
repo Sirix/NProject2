@@ -113,23 +113,17 @@ namespace NProject.Web.Controllers
             var us = new UserService();
             if (email != "")
             {
-                //test send email
-                SmtpClient client = new SmtpClient();
-                var mm = new MailMessage("nproject.service@google.com", email);
-                mm.Subject = "NProject invitation";
-                mm.Body = "You have been invited to join NProject";
-                mm.IsBodyHtml = true;
-                client.Send(mm);
-
-
                 int uid = us.GetUserIdByEmail(email);
                 if (uid == -1)
                 {
+
                     //send an e-mail
                 }
                 else
                 {
-                    us.SendInvite(uid, SessionStorage.User.Id, id);
+                    var i = us.SendInvite(uid, SessionStorage.User.Id, id);
+                    var html = RenderEmailToString("InviteToProject", i);
+                    MessageService.SendEmail(i.Invitee.Email, "Invitation", html);
                     return new ContentResult {Content = "Message sent!"};
                 }
             }
@@ -139,7 +133,13 @@ namespace NProject.Web.Controllers
                 foreach (var userId in userIds)
                 {
                     if (userId != SessionStorage.User.Id)
-                        us.SendInvite(userId, SessionStorage.User.Id, id);
+                    {
+                        
+                        //MessageService.SendEmail()
+                        var i =us.SendInvite(userId, SessionStorage.User.Id, id);
+                        var html = RenderEmailToString("InviteToProject", i);
+                       
+                    }
                 }
                 return new ContentResult {Content = "Invitations sent!"};
             }

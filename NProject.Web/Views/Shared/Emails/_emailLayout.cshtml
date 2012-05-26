@@ -1,0 +1,14 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <h2>NProject</h2>
+    @RenderBody()
+    <hr />
+    <a href="@Url.AbsoluteAction("Index", "Home")">NProject</a> &copy; @DateTime.UtcNow.Year
+</body>
+</html>

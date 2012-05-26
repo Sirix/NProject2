@@ -1,0 +1,17 @@
+﻿@model NProject.Models.Domain.Invitation
+@{
+    Layout = "_emailLayout.cshtml";
+}
+Hello, @Model.Invitee.Name!<br />
+<br />
+You have been invited by @Model.Sender.Name to join project "@Model.Project.Name"
+on NProject.<br />
+You can choose one of the following:<br />
+<ul>
+    <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "accept" })">Accept invitation</a>
+        (you would be a part of project's team);</li>
+    <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "decline" })">Decline invitation</a>
+        (we will politely inform sender about your decline);</li>
+    <li><a href="@Url.AbsoluteAction("ProcessInvite", "Project", new { id = Model.Id, verb = "block" })">Block invitation</a>
+        (you would not receive invitations from this user more).</li>
+</ul>
