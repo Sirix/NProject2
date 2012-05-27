@@ -9,11 +9,11 @@
 <div class="page-header">
 <h1>@Model.Name</h1>
 </div>
-<div class="row" style="margin-bottom: 5px;">
+@*<div class="row" style="margin-bottom: 5px;">
   <div class="span3 offset11">
     <a class="btn btn-small" href="@Url.Action("Edit", "Project", new {id=Model.Id})"><i class="icon-cog"></i> Edit</a>
    </div>
-</div>
+</div>*@
 <ul class="nav nav-pills">
     <li class="active"><a href="@Url.Action("Show", "Project", new {id=Model.Id})">Information</a></li>
     <li><a href="@Url.Action("List", "Task", new {id=Model.Id})">Tasks</a></li>
