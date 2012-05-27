@@ -63,16 +63,55 @@ namespace NProject.BLL
 
             return user == null ? -1 : user.Id;
         }
+
         public Invitation SendInvite(string inviteeEmail, int senderId, int projectId)
         {
             var sender = Database.Users.First(u => u.Id == senderId);
-            
             var i = new Invitation
                         {
-                            InviteeEmail = inviteeEmail,
                             Sender = sender,
                             ProjectId = projectId
                         };
+            if (string.Compare(sender.Email, inviteeEmail) == 0)
+                throw new Exception("You can't invite yourself.");
+
+            Invitation blocked;
+
+            var possibleInvitee = Database.Users.FirstOrDefault(u => u.Email == inviteeEmail);
+            if (possibleInvitee != null)
+            {
+                i.Invitee = possibleInvitee;
+                blocked = Database.Invitations.FirstOrDefault(o => o.Sender.Id == senderId &&
+                                                                   o.Invitee != null &&
+                                                                   o.Invitee.Id == possibleInvitee.Id);
+            }
+            else
+            {
+                i.InviteeEmail = inviteeEmail;
+                blocked = Database.Invitations.FirstOrDefault(o => o.Sender.Id == senderId &&
+                                                                   o.InviteeEmail == inviteeEmail);
+            }
+
+            if (blocked != null && blocked.Status == InvitationStatus.Blocked)
+                throw new Exception("This user blocked invitations from you.");
+
+            //check already existing invitations
+            if (blocked != null && blocked.ProjectId == projectId)
+            {
+                switch (blocked.Status)
+                {
+                    case InvitationStatus.Sent:
+                        throw new Exception("You have already sent invitation to this user.");
+                        break;
+                    case InvitationStatus.Accepted:
+                        throw new Exception("This user is already in your team.");
+                        break;
+                    case InvitationStatus.Declined:
+                        throw new Exception("The user declined your invitation.");
+                        break;
+                }
+            }
+
             Database.Invitations.Add(i);
             Database.SaveChanges();
             return i;
@@ -120,7 +159,7 @@ namespace NProject.BLL
                     break;
                 case "block":
                     invitation.Status = InvitationStatus.Blocked;
-                    result = "You have blocked invitations to this project";
+                    result = "You have blocked invitations from this user.";
                     break;
 
             }

@@ -68,11 +68,10 @@ We will look for this user in our base or send him a direct e-mail.
         $(senderBtn).attr('disabled', 'disabled');
         $.post(document.URL, { email: email }, function (data) {
             $('#singleEmailSubmitMessage').show();
-            $('#singleEmailSubmitMessage').html('You have sent the invitation to ' + email);
-            $('#singleEmailSubmitMessage').fadeOut(2500);
+            $('#singleEmailSubmitMessage').html(data);
+            $('#singleEmailSubmitMessage').fadeOut(5000);
             $('#singleEmail').val('');
             $(senderBtn).removeAttr('disabled');
-            alert(data);
         });
     }
 </script>

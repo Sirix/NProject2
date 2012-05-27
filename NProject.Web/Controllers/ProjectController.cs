@@ -113,20 +113,16 @@ namespace NProject.Web.Controllers
             var us = new UserService();
             if (email != "")
             {
-                int uid = us.GetUserIdByEmail(email);
-                if (uid == -1)
+                try
                 {
                     var i = us.SendInvite(email, SessionStorage.User.Id, id);
                     var html = RenderEmailToString("InviteToProject", i);
-                    MessageService.SendEmail(i.InviteeEmail, "Invitation", html);
-                    return new ContentResult { Content = "Message sent!" };
+                    MessageService.SendEmail(email, "Invitation", html);
+                    return new JsonResult {Data = "Message sent!"};
                 }
-                else
+                catch (Exception ex)
                 {
-                    var i = us.SendInvite(uid, SessionStorage.User.Id, id);
-                    var html = RenderEmailToString("InviteToProject", i);
-                    MessageService.SendEmail(i.Invitee.Email, "Invitation", html);
-                    return new ContentResult {Content = "Message sent!"};
+                    return new JsonResult {Data = ex.Message};
                 }
             }
 
@@ -136,14 +132,12 @@ namespace NProject.Web.Controllers
                 {
                     if (userId != SessionStorage.User.Id)
                     {
-                        
-                        //MessageService.SendEmail()
-                        var i =us.SendInvite(userId, SessionStorage.User.Id, id);
+                        var i = us.SendInvite(userId, SessionStorage.User.Id, id);
                         var html = RenderEmailToString("InviteToProject", i);
-                       
+                        MessageService.SendEmail(i.Invitee.Email, "Invitation", html);
                     }
                 }
-                return new ContentResult {Content = "Invitations sent!"};
+                return new JsonResult {Data = "Invitations sent!"};
             }
             return new ContentResult();
         }
