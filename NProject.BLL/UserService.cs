@@ -44,6 +44,10 @@ namespace NProject.BLL
                                                        RegistrationDate = DateTime.UtcNow
                                                    });
                 Database.SaveChanges();
+
+                //send email
+                MessageService.SendEmail(user.Email, "Welcome to NProject!", "RegistrationGreetings",
+                                         new EmailDTO<string> {User = user, Model = password});
                 return user;
             }
             catch (Exception ex)

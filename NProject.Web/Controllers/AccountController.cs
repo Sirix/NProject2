@@ -88,7 +88,6 @@ namespace NProject.Web.Controllers
                                                   model.TimeShiftFromUtc);
 
                 FormsAuthentication.SetAuthCookie(model.Email, true);
-
                 //store user data
                 SessionStorage.User = new UserSessionInfo
                                           {
@@ -99,10 +98,6 @@ namespace NProject.Web.Controllers
                 
                 //create first default workspace
                 new WorkspaceService().Create(user.Email + "-workspace", user);
-
-                //send email
-                string html = RenderEmailToString("RegistrationGreetings", model);
-                MessageService.SendEmail(user.Email, "Welcome to NProject!", html);
 
                 TempData["SuccessMessage"] = "Your account has been created!";
                 return RedirectToAction("Index", "Workspace");

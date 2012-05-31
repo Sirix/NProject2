@@ -1,16 +1,16 @@
-﻿@model NProject.Web.ViewModels.Account.SimpleRegistration
+﻿@model NProject.BLL.EmailDTO<string>
 @{
     Layout = "_emailLayout.cshtml";
 }
-Hello, @Model.Name @Model.LastName!<br />
+Hello, @Model.User.Name!<br />
 <br />
 You have successfully registered on NProject.<br />
 Now you can take all advantages of our service.
 <br/>
 <br/>
 Your login data:<br/>
-<b>Login:</b> @Model.Email<br/>
-<b>Password:</b> @Model.Password (only you know your password)<br/>
+<b>Login:</b> @Model.User.Email<br/>
+<b>Password:</b> @Model.Model (only you know your password)<br/>
 <br/>
 Use this data to sign in on @Html.AbsActionLink("NProject", "Index", "Home")<br/>
 <br/>
