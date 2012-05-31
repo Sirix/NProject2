@@ -14,6 +14,17 @@ namespace NProject.BLL
     {
         public User User { get; set; }
         public T Model { get; set; }
+
+        public EmailDTO(T model, User user = null)
+        {
+            Model = model;
+            User = user;
+        }
+
+        public EmailDTO()
+        {
+            
+        }
     }
 
     public class MessageService
