@@ -30,15 +30,34 @@ namespace NProject.BLL
             return query.ToList();
         }
 
-        public void AddTask(int projectId, Task task)
+        public Task AddTask(int projectId, Task task)
         {
-            if (task.ResponsibleId.GetValueOrDefault() < 1)
-                task.ResponsibleId = null;
-            else
+            bool taskAssigned = task.ResponsibleId.GetValueOrDefault() > 0;
+
+            if (taskAssigned)
                 task.Status = TaskStatus.Assigned;
-            
+            else
+                task.ResponsibleId = null;
+
             Database.Tasks.Add(task);
             Database.SaveChanges();
+
+            //send emails
+            if (taskAssigned)
+                MessageService.SendEmail(task.Responsible.Email, "New task", "NewTask",
+                                         new EmailDTO<Task> {User = task.Responsible, Model = task});
+                    //send only one email
+            else
+            {
+                //send email to everybody, except partial time programmers
+                foreach (var teamMate in task.Project.Team.Where(tm => tm.AccessLevelValue != (int) AccessLevel.Partial)
+                    )
+                {
+                    MessageService.SendEmail(teamMate.User.Email, "New task", "NewTask",
+                                             new EmailDTO<Task> {User = teamMate.User, Model = task});
+                }
+            }
+            return task;
         }
 
         public Task GetTask(int id)

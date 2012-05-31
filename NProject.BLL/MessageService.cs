@@ -10,8 +10,61 @@ using NProject.Models.Domain;
 
 namespace NProject.BLL
 {
+    public class EmailDTO<T>
+    {
+        public User User { get; set; }
+        public T Model { get; set; }
+    }
+
     public class MessageService
     {
+        private static ControllerContext context;
+
+        public static void Initialize(ControllerContext ctx)
+        {
+            context = ctx;
+        }
+
+        private static string RenderEmailToString<T>(string viewName, EmailDTO<T> model)
+        {
+            ViewDataDictionary vd = new ViewDataDictionary(model);
+            try
+            {
+                using (StringWriter sw = new StringWriter())
+                {
+                    ViewEngineResult viewResult = ViewEngines.Engines.FindView(context, "Emails/" + viewName,
+                                                                               "Emails/_emailLayout");
+                    ViewContext viewContext = new ViewContext(context, viewResult.View, vd, new TempDataDictionary(), sw);
+                    viewResult.View.Render(viewContext, sw);
+
+                    return sw.GetStringBuilder().ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+
+        public static void SendEmail<T>(string email, string subject, string templateName, EmailDTO<T> model)
+        {
+            try
+            {
+                SmtpClient client = new SmtpClient();
+                MailMessage mm = new MailMessage("nproject.service@gmail.com", email)
+                                     {
+                                         IsBodyHtml = true,
+                                         Subject = subject,
+                                         Body = RenderEmailToString(templateName, model)
+                                     };
+
+                client.SendAsync(mm, null);
+            }
+            catch
+            {
+            }
+        }
+
         public static void SendEmail(string email, string subject, string message)
         {
             try

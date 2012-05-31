@@ -1,0 +1,28 @@
+﻿@model NProject.BLL.EmailDTO<NProject.Models.Domain.Task>
+@{
+    bool taskAssigned = Model.Model.ResponsibleId.GetValueOrDefault() > 0;
+    Layout = "_emailLayout.cshtml";
+}
+Hello, @Model.User.Name!<br />
+<br />
+You received this email because you are a part of "@Model.Model.Project.Name" team.<br />
+@if (taskAssigned)
+{
+    <text>A new task was created and assigned to you:<br />
+    </text>
+}
+else
+{
+    <text>A new task was created in project. It is a free-assginment task. You can start work on it right now:<br />
+    </text>
+}
+<br />
+<b>Task name:</b> @Model.Model.Name<br />
+<b>Task description:</b> @Model.Model.Description<br />
+<b>Payment type:</b> @Model.Model.CostType<br />
+@if (Model.Model.CostType != NProject.Models.Domain.CostType.Free)
+{
+    <text><b>Payment value:</b> @Model.Model.CostValue<br /></text>
+}
+<br />
+@Html.AbsActionLink("View full information", "Show", "Task", new { id = Model.Model.Id })

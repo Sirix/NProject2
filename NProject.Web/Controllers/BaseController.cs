@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using NProject.BLL;
 using NProject.Web.Helpers;
 
 namespace NProject.Web.Controllers
@@ -16,6 +17,11 @@ namespace NProject.Web.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            //initialize message service
+            //we should pass controller context to message service because Razor depends on it - 
+            //to get right urls, routes and so on...
+            MessageService.Initialize(ControllerContext);
 
             //Check session
             if (Request.IsAuthenticated && SessionStorage.User == null)
