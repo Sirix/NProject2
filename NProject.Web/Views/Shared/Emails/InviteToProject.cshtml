@@ -1,28 +1,28 @@
-﻿@model NProject.Models.Domain.Invitation
+﻿@model NProject.BLL.EmailDTO<NProject.Models.Domain.Invitation>
 @{
-    bool invitationForRegistered = string.IsNullOrEmpty(Model.InviteeEmail);
+    bool invitationForRegistered = string.IsNullOrEmpty(Model.Model.InviteeEmail);
     Layout = "_emailLayout.cshtml";
 }
 @if (invitationForRegistered)
 {
-    @:Hello, @Model.Invitee.Name!<br />
+    @:Hello, @Model.Model.Invitee.Name!<br />
 }
 else
 {
-    @:Hello, @Model.InviteeEmail!<br />
+    @:Hello, @Model.Model.InviteeEmail!<br />
 }
 <br />
-You have been invited by @Model.Sender.Name to join project "@Model.Project.Name"
+You have been invited by @Model.Model.Sender.Name to join project "@Model.Model.Project.Name"
 on NProject.<br />
 @if (invitationForRegistered)
 {
     <text> You can choose one of the following:<br />
     <ul>
-        <li>@Html.AbsActionLink("Accept invitation", "ProcessInvite", "Project", new { id = Model.Id, verb = "accept" })
+        <li>@Html.AbsActionLink("Accept invitation", "ProcessInvite", "Project", new { id = Model.Model.Id, verb = "accept" })
         (you would be a part of project's team);</li>
-        <li>@Html.AbsActionLink("Decline invitation", "ProcessInvite", "Project", new { id = Model.Id, verb = "decline" })
+        <li>@Html.AbsActionLink("Decline invitation", "ProcessInvite", "Project", new { id = Model.Model.Id, verb = "decline" })
         (we will politely inform sender about your decline);</li>
-        <li>@Html.AbsActionLink("Block invitation", "ProcessInvite", "Project", new { id = Model.Id, verb = "block" })
+        <li>@Html.AbsActionLink("Block invitation", "ProcessInvite", "Project", new { id = Model.Model.Id, verb = "block" })
         (you would not receive invitations from this user more).</li>
     </ul>
     </text>
@@ -32,7 +32,7 @@ else
     <text><br /> However, it seems that you are not registered on NProject.<br />
     Click @Html.AbsActionLink("here", "SimpleRegistration", "Account") to register - it is free and easy.<br />
     <br />
-    Or you can @Html.AbsActionLink("block", "ProcessInvite", "Project", new { id = Model.Id, verb = "block" }) invitations from this user.
+    Or you can @Html.AbsActionLink("block", "BlockInvitation", "Home", new { id = Model.Model.Id, verb = "block" }) invitations from this user.
     You will not receive it more.
     </text>
 }

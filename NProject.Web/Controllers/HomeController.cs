@@ -62,5 +62,13 @@ namespace NProject.Web.Controllers
             SetTempMessage("Settings saved", "success");
             return RedirectToAction("Settings");
         }
+
+        public ActionResult BlockInvitation(int id)
+        {
+            string result = new UserService().ProcessInvitation(id, "block", 0);
+            this.SetTempMessage(result, "success");
+
+            return RedirectToAction("Index");
+        }
     }
 }

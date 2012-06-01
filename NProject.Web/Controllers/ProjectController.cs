@@ -115,9 +115,7 @@ namespace NProject.Web.Controllers
             {
                 try
                 {
-                    var i = us.SendInvite(email, SessionStorage.User.Id, id);
-                    var html = RenderEmailToString("InviteToProject", i);
-                    MessageService.SendEmail(email, "Invitation", html);
+                    us.SendInvitation(email, SessionStorage.User.Id, id);
                     return new JsonResult {Data = "Message sent!"};
                 }
                 catch (Exception ex)
@@ -132,9 +130,7 @@ namespace NProject.Web.Controllers
                 {
                     if (userId != SessionStorage.User.Id)
                     {
-                        var i = us.SendInvite(userId, SessionStorage.User.Id, id);
-                        var html = RenderEmailToString("InviteToProject", i);
-                        MessageService.SendEmail(i.Invitee.Email, "Invitation", html);
+                        us.SendInvitation(userId, SessionStorage.User.Id, id);
                     }
                 }
                 return new JsonResult {Data = "Invitations sent!"};

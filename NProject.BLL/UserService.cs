@@ -68,41 +68,16 @@ namespace NProject.BLL
             return user == null ? -1 : user.Id;
         }
 
-        public Invitation SendInvite(string inviteeEmail, int senderId, int projectId)
+        private void AddOrResendInvitation(string inviteeEmail, Invitation i, IQueryable<Invitation> prevSentInvitations)
         {
-            var sender = Database.Users.First(u => u.Id == senderId);
-            var i = new Invitation
-                        {
-                            Sender = sender,
-                            ProjectId = projectId
-                        };
-            if (string.Compare(sender.Email, inviteeEmail) == 0)
-                throw new Exception("You can't invite yourself.");
-
-            Invitation blocked;
-
-            var possibleInvitee = Database.Users.FirstOrDefault(u => u.Email == inviteeEmail);
-            if (possibleInvitee != null)
-            {
-                i.Invitee = possibleInvitee;
-                blocked = Database.Invitations.FirstOrDefault(o => o.Sender.Id == senderId &&
-                                                                   o.Invitee != null &&
-                                                                   o.Invitee.Id == possibleInvitee.Id);
-            }
-            else
-            {
-                i.InviteeEmail = inviteeEmail;
-                blocked = Database.Invitations.FirstOrDefault(o => o.Sender.Id == senderId &&
-                                                                   o.InviteeEmail == inviteeEmail);
-            }
-
-            if (blocked != null && blocked.Status == InvitationStatus.Blocked)
+            if (prevSentInvitations.Any(o => o.StatusValue == (int)InvitationStatus.Blocked))
                 throw new Exception("This user blocked invitations from you.");
 
-            //check already existing invitations
-            if (blocked != null && blocked.ProjectId == projectId)
+            //check already existing invitation to this project
+            var prevSentToThisProject = prevSentInvitations.FirstOrDefault(o => o.ProjectId == i.ProjectId);
+            if (prevSentToThisProject != null)
             {
-                switch (blocked.Status)
+                switch (prevSentToThisProject.Status)
                 {
                     case InvitationStatus.Sent:
                         throw new Exception("You have already sent invitation to this user.");
@@ -111,18 +86,61 @@ namespace NProject.BLL
                         throw new Exception("This user is already in your team.");
                         break;
                     case InvitationStatus.Declined:
-                        throw new Exception("The user declined your invitation.");
+                        prevSentToThisProject.LastSentDate = DateTime.UtcNow;
+                        //resend invitation email again
+                        MessageService.SendEmail(inviteeEmail, "Invitation to project", "InviteToProject",
+                                                 new EmailDTO<Invitation>(prevSentToThisProject));
+                        Database.ObjectContext.ApplyCurrentValues("Invitations", prevSentToThisProject);
+                        Database.SaveChanges();
+                        return;
                         break;
                 }
             }
-
+            i.Project = Database.Projects.FirstOrDefault(p => p.Id == i.ProjectId);
             Database.Invitations.Add(i);
             Database.SaveChanges();
-            return i;
+            //sent email
+            MessageService.SendEmail(inviteeEmail, "Invitation to project", "InviteToProject",
+                                     new EmailDTO<Invitation>(i));
         }
 
-        public Invitation SendInvite(int inviteeId, int senderId, int projectId)
+        public void SendInvitation(string inviteeEmail, int senderId, int projectId)
         {
+            var sender = Database.Users.First(u => u.Id == senderId);
+            var i = new Invitation
+                        {
+                            Sender = sender,
+                            ProjectId = projectId
+                        };
+            if (string.Compare(sender.Email, inviteeEmail, true) == 0)
+                throw new Exception("You can't invite yourself.");
+
+            IQueryable<Invitation> prevSentInvitations;
+
+            var possibleInvitee = Database.Users.FirstOrDefault(u => u.Email == inviteeEmail);
+            if (possibleInvitee != null)
+            {
+                //we have registered user with this email
+                i.Invitee = possibleInvitee;
+                prevSentInvitations = Database.Invitations.Where(o => o.Sender.Id == senderId &&
+                                                                      o.Invitee != null &&
+                                                                      o.Invitee.Id == possibleInvitee.Id);
+            }
+            else
+            {
+                //we don't have registered user. Send him invitation with proposition of registration
+                i.InviteeEmail = inviteeEmail;
+                prevSentInvitations = Database.Invitations.Where(o => o.Sender.Id == senderId &&
+                                                                      o.InviteeEmail == inviteeEmail);
+            }
+            AddOrResendInvitation(inviteeEmail, i, prevSentInvitations);
+        }
+
+        public void SendInvitation(int inviteeId, int senderId, int projectId)
+        {            
+            if (inviteeId == senderId)
+                throw new Exception("You can't invite yourself.");
+
             var sender = Database.Users.First(u => u.Id == senderId);
             var invitee = Database.Users.First(u => u.Id == inviteeId);
 
@@ -132,14 +150,20 @@ namespace NProject.BLL
                             Sender = sender,
                             ProjectId = projectId
                         };
-            Database.Invitations.Add(i);
-            Database.SaveChanges();
-            return i;
+            var prevSentInvitations = Database.Invitations.Where(o => o.Sender.Id == senderId &&
+                                                                      o.Invitee != null &&
+                                                                      o.Invitee.Id == invitee.Id);
+            AddOrResendInvitation(invitee.Email, i, prevSentInvitations);
         }
 
         public Invitation GetInvitation(int id)
         {
             return Database.Invitations.FirstOrDefault(i => i.Id == id);
+        }
+
+        public string ProcessInvitation(int invitationId, string verb, int userId)
+        {
+            return ProcessInvitation(GetInvitation(invitationId), verb, userId);
         }
 
         public string ProcessInvitation(Invitation invitation, string verb, int userId)
@@ -163,7 +187,7 @@ namespace NProject.BLL
                     break;
                 case "block":
                     invitation.Status = InvitationStatus.Blocked;
-                    result = "You have blocked invitations from this user.";
+                    result = "You will not receive more invitations from this user.";
                     break;
 
             }
