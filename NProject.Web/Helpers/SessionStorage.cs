@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using NProject.Models.Domain;
 
 namespace NProject.Web.Helpers
 {
@@ -9,6 +10,7 @@ namespace NProject.Web.Helpers
         public int Id { get; set; }
         public string UserName { get; set; }
         public byte HoursOffsetFromUtc { get; set; }
+        public UserAccountType AccountType { get; set; }
     }
 
     public static class SessionStorage

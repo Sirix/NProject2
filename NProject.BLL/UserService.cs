@@ -22,6 +22,10 @@ namespace NProject.BLL
         {
             return Database.Users.FirstOrDefault(u => u.Id == userId);
         }
+        public List<User> GetUsers()
+        {
+            return Database.Users.ToList();
+        }
         public User IsUserExists(string email, string password)
         {
             string hash = MD5.EncryptMD5(password);

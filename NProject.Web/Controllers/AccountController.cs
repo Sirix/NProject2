@@ -39,7 +39,8 @@ namespace NProject.Web.Controllers
                                               {
                                                   Id = user.Id,
                                                   UserName = user.Name,
-                                                  HoursOffsetFromUtc = user.HoursOffsetFromUtc
+                                                  HoursOffsetFromUtc = user.HoursOffsetFromUtc,
+                                                  AccountType = user.AccountType
                                               };
 
                     if (!String.IsNullOrEmpty(returnUrl))
@@ -93,7 +94,8 @@ namespace NProject.Web.Controllers
                                           {
                                               Id = user.Id,
                                               UserName = user.Name,
-                                              HoursOffsetFromUtc = user.HoursOffsetFromUtc
+                                              HoursOffsetFromUtc = user.HoursOffsetFromUtc,
+                                              AccountType = user.AccountType
                                           };
                 
                 //create first default workspace
