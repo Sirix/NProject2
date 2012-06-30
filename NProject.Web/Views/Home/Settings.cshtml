@@ -16,31 +16,33 @@
             <input type="submit" class="btn btn-small btn-primary" value="Save" />
         </div>
         <div class="control-group">
-                @Html.LabelFor(model => model.FirstName)
-                <div class="controls">
-                    @Html.TextBoxFor(model => model.FirstName)
-                    @Html.ValidationMessageFor(model => model.FirstName)
-                </div>
-            </div><div class="control-group">
-                @Html.LabelFor(model => model.LastName)
-                <div class="controls">
-                    @Html.TextBoxFor(model => model.LastName)
-                    @Html.ValidationMessageFor(model => model.LastName)
-                </div>
+            @Html.LabelFor(model => model.FirstName)
+            <div class="controls">
+                @Html.TextBoxFor(model => model.FirstName)
+                @Html.ValidationMessageFor(model => model.FirstName)
             </div>
-            <div class="control-group">
-                @Html.LabelFor(model => model.Email)
-                <div class="controls">
-                    @Html.TextBoxFor(model => model.Email, new { disabled = "disabled" })
-                </div>
-            <div class="control-group">
-                @Html.LabelFor(model => model.Language)
-                <div class="controls">
-                    @Html.TextBoxFor(model => model.Language)
-                    @Html.ValidationMessageFor(model => model.Language)
-                </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.LastName)
+            <div class="controls">
+                @Html.TextBoxFor(model => model.LastName)
+                @Html.ValidationMessageFor(model => model.LastName)
             </div>
-            <div class="control-group">
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Email)
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Email, new { disabled = "disabled" })
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Language)
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Language)
+                @Html.ValidationMessageFor(model => model.Language)
+            </div>
+        </div>
+        <div class="control-group">
                 @Html.LabelFor(model => model.HoursOffsetFromUtc)
                 <div class="controls">
                     @Html.TextBoxFor(model => model.HoursOffsetFromUtc)

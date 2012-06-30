@@ -22,10 +22,12 @@ namespace NProject.BLL
         {
             return Database.Users.FirstOrDefault(u => u.Id == userId);
         }
+
         public List<User> GetUsers()
         {
             return Database.Users.ToList();
         }
+
         public User IsUserExists(string email, string password)
         {
             string hash = MD5.EncryptMD5(password);
@@ -33,7 +35,7 @@ namespace NProject.BLL
             return user;
         }
 
-        public User CreateUser(string name,string lastName, string email, string password, byte timeshift)
+        public User CreateUser(string name, string lastName, string email, string password, byte timeshift)
         {
             //we have unique email constraint in db, so no need to check it here
             try
@@ -74,7 +76,7 @@ namespace NProject.BLL
 
         private void AddOrResendInvitation(string inviteeEmail, Invitation i, IQueryable<Invitation> prevSentInvitations)
         {
-            if (prevSentInvitations.Any(o => o.StatusValue == (int)InvitationStatus.Blocked))
+            if (prevSentInvitations.Any(o => o.StatusValue == (int) InvitationStatus.Blocked))
                 throw new Exception("This user blocked invitations from you.");
 
             //check already existing invitation to this project
@@ -141,7 +143,7 @@ namespace NProject.BLL
         }
 
         public void SendInvitation(int inviteeId, int senderId, int projectId)
-        {            
+        {
             if (inviteeId == senderId)
                 throw new Exception("You can't invite yourself.");
 
@@ -199,7 +201,8 @@ namespace NProject.BLL
             return result;
         }
 
-        public void UpdateUserProfile(int userId,string firstName, string lastName, string password, byte hoursOffset, string locale)
+        public void UpdateUserProfile(int userId, string firstName, string lastName, string password, byte hoursOffset,
+                                      string locale)
         {
             var user = Database.Users.FirstOrDefault(u => u.Id == userId);
             user.FirstName = firstName;

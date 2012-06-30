@@ -16,8 +16,9 @@ namespace NProject.Web.ViewModels.Home
         public string Email { get; set; }
 
         public byte HoursOffsetFromUtc { get; set; }
-        public string Password { get; set; }
-        public string PasswordAgain { get; set; }
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
+
         public string Language { get; set; }
     }
 }

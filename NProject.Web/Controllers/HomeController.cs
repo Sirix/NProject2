@@ -54,7 +54,7 @@ namespace NProject.Web.Controllers
             c.Expires = DateTime.UtcNow.AddYears(1);
             Response.Cookies.Set(c);
 
-            new UserService().UpdateUserProfile(SessionStorage.User.Id, model.FirstName, model.LastName, model.Password, model.HoursOffsetFromUtc, model.Language);
+            new UserService().UpdateUserProfile(SessionStorage.User.Id, model.FirstName, model.LastName, model.NewPassword, model.HoursOffsetFromUtc, model.Language);
 
             SessionStorage.User.UserName = new UserService().GetUser(SessionStorage.User.Id).Name;
             SessionStorage.User.HoursOffsetFromUtc = model.HoursOffsetFromUtc;
