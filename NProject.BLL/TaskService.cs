@@ -20,7 +20,12 @@ namespace NProject.BLL
                     break;
 
                 case "active":
-                    query = query.Where(t => t.StatusValue != (int)TaskStatus.Stopped && t.StatusValue != (int)TaskStatus.Completed);
+                    query =
+                        query.Where(
+                            t =>
+                            t.StatusValue == (int) TaskStatus.Created ||
+                            t.StatusValue == (int) TaskStatus.Assigned ||
+                            t.StatusValue == (int) TaskStatus.Executing);
                     break;
 
                 case "completed":
