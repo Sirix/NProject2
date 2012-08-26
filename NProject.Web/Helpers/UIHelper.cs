@@ -122,5 +122,20 @@ namespace NProject.Web.Helpers
 
             return new MvcHtmlString(temp);
         }
+
+        public static MvcHtmlString SubmitButton(this HtmlHelper helper, string value)
+        {
+            return SubmitButton(helper, value, new {@class = "btn"});
+        }
+
+        public static MvcHtmlString SubmitButton(this HtmlHelper helper, string value, object htmlAttributes = null)
+        {
+            TagBuilder tb = new TagBuilder("input");
+            tb.MergeAttribute("type", "submit");
+            tb.MergeAttribute("value", value);
+            tb.MergeAttributes(HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+
+            return new MvcHtmlString(tb.ToString(TagRenderMode.SelfClosing));
+        }
     }
 }
