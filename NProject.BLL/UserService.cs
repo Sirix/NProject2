@@ -256,7 +256,7 @@ namespace NProject.BLL
             if (user == null) throw new ServiceException("USER_NOT_FOUND")
                 ;
 
-            string ourToken = MD5.EncryptMD5(string.Format("{0}{1}{2}", email, user.RegistrationDate, user.PasswordHash));
+            string ourToken = MD5.EncryptMD5(string.Format("{0}{1}{2}", user.Email, user.RegistrationDate, user.PasswordHash));
 
             return ourToken;
         }
