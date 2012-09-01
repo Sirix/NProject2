@@ -5,40 +5,40 @@
     ViewBag.Title = "Registration";
     Layout = "~/Views/Shared/Site.Layout.cshtml";
 }
-
-<h2>Registration</h2>
-
+<div style="margin: 50px 0; padding: 0; text-align: center">
+    <div class="span4" style="float: none; margin: 0px auto; text-align: left; padding: 15px;
+        border: 1px dashed #333; background-color: #eee;">
 @using (Html.BeginForm("SimpleRegistrationFinish", "Account"))
 {
     @Html.ValidationSummary(true)
     <fieldset>
-        <legend>SimpleRegistration</legend>
+        <legend>Registration</legend>
 
         <div class="control-group">
             @Html.LabelFor(model => model.Email)
             <div class="controls">
-                @Html.EditorFor(model => model.Email)
+                @Html.TextBoxFor(model => model.Email, new { @class = "span4" })
                 @Html.ValidationMessageFor(model => model.Email)
             </div>
         </div>
         <div class="control-group">
             @Html.LabelFor(model => model.Password)
             <div class="controls">
-                @Html.PasswordFor(model => model.Password)
+                @Html.PasswordFor(model => model.Password, new { @class = "span4" })
                 @Html.ValidationMessageFor(model => model.Password)
             </div>
         </div>
         <div class="control-group">
             @Html.LabelFor(model => model.Name)
             <div class="controls">
-                @Html.EditorFor(model => model.Name)
+                @Html.TextBoxFor(model => model.Name, new { @class = "span4" })
                 @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
         <div class="control-group">
             @Html.LabelFor(model => model.LastName)
             <div class="controls">
-                @Html.EditorFor(model => model.LastName)
+                @Html.TextBoxFor(model => model.LastName, new { @class = "span4" })
                 @Html.ValidationMessageFor(model => model.LastName)
             </div>
         </div>
@@ -48,3 +48,5 @@
         </p>
     </fieldset>
 }
+</div>
+</div>

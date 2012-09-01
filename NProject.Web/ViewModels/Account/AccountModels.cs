@@ -30,7 +30,7 @@ namespace NProject.Web.ViewModels.Account
     public class LogOnModel
     {
         [Required]
-        [DisplayName("User name")]
+        [DisplayName("Email")]
         public string Email { get; set; }
 
         [Required]

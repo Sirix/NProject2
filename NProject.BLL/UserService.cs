@@ -23,6 +23,16 @@ namespace NProject.BLL
             return Database.Users.FirstOrDefault(u => u.Id == userId);
         }
 
+        /// <summary>
+        /// Retrieves the user instance from the database by passed email.
+        /// </summary>
+        /// <param name="userEmail">User email</param>
+        /// <returns>User instance, if exists; otherwise, null</returns>
+        public User GetUser(string userEmail)
+        {
+            return Database.Users.FirstOrDefault(u => u.Email == userEmail);
+        }
+
         public List<User> GetUsers()
         {
             return Database.Users.ToList();
@@ -215,10 +225,56 @@ namespace NProject.BLL
             Database.ObjectContext.ApplyCurrentValues("Users", user);
             Database.SaveChanges();
         }
-    }
-    public class ServiceException:Exception
-    {
 
+
+        public bool IsPasswordRestoreTokenValid(string email, string token)
+        {
+            var user = GetUser(email);
+            if (user == null) return false;
+
+            try
+            {
+                string ourToken = this.CreateRestoreToken(email);
+                return string.Compare(token, ourToken) == 0;
+            }
+            catch (ServiceException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Creates a restore password token for requested user.
+        /// </summary>
+        /// <param name="email">user email</param>
+        /// <exception cref="ServiceException">Throws when no user is found</exception>
+        /// <returns>token</returns>
+        public string CreateRestoreToken(string email)
+        {
+            var user = GetUser(email);
+
+            if (user == null) throw new ServiceException("USER_NOT_FOUND")
+                ;
+
+            string ourToken = MD5.EncryptMD5(string.Format("{0}{1}{2}", email, user.RegistrationDate, user.PasswordHash));
+
+            return ourToken;
+        }
+
+        public void UpdateUserPassword(string email, string newPassword)
+        {
+            var user = Database.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+                throw new ServiceException("USER_NOT_FOUND");
+
+            string newHash = MD5.EncryptMD5(newPassword);
+            if (newHash == user.PasswordHash)
+                throw new ServiceException("USER_CHANGE_TO_THE_SAME_PASSWORD");
+            
+            user.PasswordHash = newHash;
+            Database.ObjectContext.ApplyCurrentValues("Users", user);
+            Database.SaveChanges();
+        }
     }
 }
 

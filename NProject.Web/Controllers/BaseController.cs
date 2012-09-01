@@ -76,6 +76,11 @@ namespace NProject.Web.Controllers
             TempData[messageLevel + "Message"] = message;
         }
 
+        public void SetTempMessage(string message, ServiceException.ExceptionLevel messageLevel)
+        {
+            SetTempMessage(message, messageLevel.ToString());
+        }
+
         public string RenderEmailToString(string viewName, object model)
         {
             ViewData.Model = model;

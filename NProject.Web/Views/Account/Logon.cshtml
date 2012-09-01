@@ -1,0 +1,39 @@
+﻿@model NProject.Web.ViewModels.Account.LogOnModel
+<div style="margin: 50px 0; padding: 0; text-align: center">
+    <div class="span4" style="float: none; margin: 0px auto; text-align: left; padding: 15px;
+        border: 1px dashed #333; background-color: #eee;">
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <legend>Log on</legend>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Email)
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "span4" })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Password)
+                    <div class="controls">
+                        @Html.PasswordFor(model => model.Password, new { @class = "span4" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.RememberMe)
+                    <div class="controls" style="display: inline">
+                        @Html.EditorFor(model => model.RememberMe)
+                        @Html.ValidationMessageFor(model => model.RememberMe)
+                    </div>
+                </div>
+                <p>
+                    <input type="submit" value="Log on" class="btn" />
+                </p>
+            </fieldset>
+        }
+        @Html.ActionLink("Forgot password?", "ForgotPassword")<br />
+        @Html.ActionLink("Don't have an account yet?", "SimpleRegistration")
+    </div>
+</div>

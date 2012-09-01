@@ -45,18 +45,18 @@ namespace NProject.Web.Controllers
 
                     if (!String.IsNullOrEmpty(returnUrl))
                         return Redirect(returnUrl);
-
+                    else
+                        return RedirectToAction("Index", "Home");
                 }
                 else
                 {
                     this.TempData["ErrorMessage"] = "We can't find such user :(";
                     //ModelState.AddModelError("", "The user name or password provided is incorrect.");
                 }
-                return RedirectToAction("Index", "Home");
             }
 
             // If we got this far, something failed, redisplay form
-            return RedirectToAction("Index", "Home");
+            return View(model);
         }
 
         // **************************************
@@ -109,6 +109,63 @@ namespace NProject.Web.Controllers
                 TempData["ErrorMessage"] = ex.Message;
                 return View("SimpleRegistration", model);
             }
+        }
+
+        public ActionResult ForgotPassword(string email = "", string token = "")
+        {
+            var vm = new RestorePassword {Email = email};
+
+            if (email == "") return View(vm);
+
+            //try
+            //{
+            vm.IsValidToken = UserService.IsPasswordRestoreTokenValid(email, token);
+            //}
+            //catch (ServiceException ex)
+            //{
+            //    this.SetTempMessage(ex.Message, "Error");
+            //}
+
+            //show form for update password here or to get token
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult ForgotPassword(RestorePassword model)
+        {
+            try
+            {
+                //have only email
+                if (string.IsNullOrEmpty(model.Token))
+                {
+                    string token = UserService.CreateRestoreToken(model.Email);
+
+                    MessageService.SendEmail<string>(model.Email, "Change password", "PasswordRestoreRequest",
+                                                     new EmailDTO<string>
+                                                         {Model = token, User = UserService.GetUser(model.Email)});
+                    this.SetTempMessage("Please check your email for next instructions", "success");
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                model.IsValidToken = UserService.IsPasswordRestoreTokenValid(model.Email, model.Token);
+                if (!model.IsValidToken)
+                {
+                    this.SetTempMessage("Invalid token", "error");
+                    return RedirectToAction("Index", "Home");
+                }
+
+                //update password here
+                UserService.UpdateUserPassword(model.Email, model.NewPassword);
+                this.SetTempMessage("You have changed your password", "success");
+                return RedirectToAction("Index", "Home");
+            }
+
+            catch (ServiceException ex)
+            {
+                this.SetTempMessage(ex.Message, ex.Level);
+            }
+            return View(model);
         }
     }
 }
