@@ -99,7 +99,10 @@ namespace NProject.Models.Domain
                     case Domain.CostType.Fixed:
                         return CostValue.Value;
                     case Domain.CostType.PerTime:
-                        return CostValue.Value*(EndWorkDate.Value.Hour - BeginWorkDate.Value.Hour);
+                        if (!EndWorkDate.HasValue)
+                            return 0;
+                        else
+                            return CostValue.Value*(EndWorkDate.Value.Hour - BeginWorkDate.Value.Hour);
                     default:
                         return 0;
                 }
